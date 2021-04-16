@@ -16,6 +16,8 @@
 		7943B05B2629EE9600DAC838 /* TheGoodCornerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7943B05A2629EE9600DAC838 /* TheGoodCornerTests.swift */; };
 		7943B0662629EE9600DAC838 /* TheGoodCornerUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7943B0652629EE9600DAC838 /* TheGoodCornerUITests.swift */; };
 		794C4E382629F98F005A3496 /* AdModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 794C4E372629F98F005A3496 /* AdModel.swift */; };
+		794C4E47262A16C5005A3496 /* AdViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 794C4E46262A16C5005A3496 /* AdViewModel.swift */; };
+		794C4E4D262A1913005A3496 /* AdAPIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 794C4E4C262A1913005A3496 /* AdAPIService.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -51,6 +53,8 @@
 		7943B0652629EE9600DAC838 /* TheGoodCornerUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TheGoodCornerUITests.swift; sourceTree = "<group>"; };
 		7943B0672629EE9600DAC838 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		794C4E372629F98F005A3496 /* AdModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdModel.swift; sourceTree = "<group>"; };
+		794C4E46262A16C5005A3496 /* AdViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdViewModel.swift; sourceTree = "<group>"; };
+		794C4E4C262A1913005A3496 /* AdAPIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdAPIService.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -101,6 +105,8 @@
 		7943B0422629EE8800DAC838 /* TheGoodCorner */ = {
 			isa = PBXGroup;
 			children = (
+				794C4E4B262A18C8005A3496 /* API Service */,
+				794C4E3C262A1437005A3496 /* ViewModel */,
 				794C4E362629F74F005A3496 /* Model */,
 				7943B0432629EE8900DAC838 /* AppDelegate.swift */,
 				7943B0452629EE8900DAC838 /* SceneDelegate.swift */,
@@ -137,6 +143,22 @@
 				794C4E372629F98F005A3496 /* AdModel.swift */,
 			);
 			path = Model;
+			sourceTree = "<group>";
+		};
+		794C4E3C262A1437005A3496 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				794C4E46262A16C5005A3496 /* AdViewModel.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		794C4E4B262A18C8005A3496 /* API Service */ = {
+			isa = PBXGroup;
+			children = (
+				794C4E4C262A1913005A3496 /* AdAPIService.swift */,
+			);
+			path = "API Service";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -269,6 +291,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				794C4E47262A16C5005A3496 /* AdViewModel.swift in Sources */,
+				794C4E4D262A1913005A3496 /* AdAPIService.swift in Sources */,
 				7943B0482629EE8900DAC838 /* ViewController.swift in Sources */,
 				7943B0442629EE8900DAC838 /* AppDelegate.swift in Sources */,
 				794C4E382629F98F005A3496 /* AdModel.swift in Sources */,

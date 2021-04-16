@@ -7,7 +7,7 @@
 
 import Foundation
 
-// MARK: - WelcomeElement
+// MARK: - Ad Model
 struct Ad: Codable {
     let id, categoryID: Int
     let title, welcomeDescription: String
@@ -28,11 +28,12 @@ struct Ad: Codable {
     }
 }
 
-// MARK: - ImagesURL
+// MARK: - ImagesURL Model
 struct ImagesURL: Codable {
     let small, thumb: String
 }
 
+// MARK: - Category Model
 struct Category: Codable {
     let id: Int
     let name: String
