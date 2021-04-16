@@ -105,12 +105,12 @@
 		7943B0422629EE8800DAC838 /* TheGoodCorner */ = {
 			isa = PBXGroup;
 			children = (
+				794C4E54262A20C4005A3496 /* Controller */,
 				794C4E4B262A18C8005A3496 /* API Service */,
 				794C4E3C262A1437005A3496 /* ViewModel */,
 				794C4E362629F74F005A3496 /* Model */,
 				7943B0432629EE8900DAC838 /* AppDelegate.swift */,
 				7943B0452629EE8900DAC838 /* SceneDelegate.swift */,
-				7943B0472629EE8900DAC838 /* ViewController.swift */,
 				7943B0492629EE8900DAC838 /* Main.storyboard */,
 				7943B04C2629EE9500DAC838 /* Assets.xcassets */,
 				7943B04E2629EE9500DAC838 /* LaunchScreen.storyboard */,
@@ -159,6 +159,14 @@
 				794C4E4C262A1913005A3496 /* AdAPIService.swift */,
 			);
 			path = "API Service";
+			sourceTree = "<group>";
+		};
+		794C4E54262A20C4005A3496 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				7943B0472629EE8900DAC838 /* ViewController.swift */,
+			);
+			path = Controller;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

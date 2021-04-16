@@ -8,5 +8,30 @@
 import Foundation
 
 class AdViewModel : NSObject {
-
+    
+    private var adApiService : AdAPIService!
+    var adService = AdAPIService(adSession: URLSession(configuration: .default))
+    
+    private(set) var adData : [Ad]! {
+        didSet {
+            self.bindEmployeeViewModelToController()
+        }
+    }
+    
+    var bindEmployeeViewModelToController : (() -> ()) = {}
+    
+    override init() {
+        super.init()
+        self.adApiService =  adService
+        callFuncToGetAdData()
+    }
+    
+    func callFuncToGetAdData() {
+        self.adApiService.apiToGetAd { (ad, error) in
+            if let unwrapAds = ad {
+                self.adData = unwrapAds
+                print(unwrapAds)
+            }
+        }
+    }
 }
