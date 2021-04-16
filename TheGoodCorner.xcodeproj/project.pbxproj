@@ -15,6 +15,7 @@
 		7943B0502629EE9500DAC838 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7943B04E2629EE9500DAC838 /* LaunchScreen.storyboard */; };
 		7943B05B2629EE9600DAC838 /* TheGoodCornerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7943B05A2629EE9600DAC838 /* TheGoodCornerTests.swift */; };
 		7943B0662629EE9600DAC838 /* TheGoodCornerUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7943B0652629EE9600DAC838 /* TheGoodCornerUITests.swift */; };
+		794C4E382629F98F005A3496 /* AdModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 794C4E372629F98F005A3496 /* AdModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -49,6 +50,7 @@
 		7943B0612629EE9600DAC838 /* TheGoodCornerUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TheGoodCornerUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		7943B0652629EE9600DAC838 /* TheGoodCornerUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TheGoodCornerUITests.swift; sourceTree = "<group>"; };
 		7943B0672629EE9600DAC838 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		794C4E372629F98F005A3496 /* AdModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -99,6 +101,7 @@
 		7943B0422629EE8800DAC838 /* TheGoodCorner */ = {
 			isa = PBXGroup;
 			children = (
+				794C4E362629F74F005A3496 /* Model */,
 				7943B0432629EE8900DAC838 /* AppDelegate.swift */,
 				7943B0452629EE8900DAC838 /* SceneDelegate.swift */,
 				7943B0472629EE8900DAC838 /* ViewController.swift */,
@@ -126,6 +129,14 @@
 				7943B0672629EE9600DAC838 /* Info.plist */,
 			);
 			path = TheGoodCornerUITests;
+			sourceTree = "<group>";
+		};
+		794C4E362629F74F005A3496 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				794C4E372629F98F005A3496 /* AdModel.swift */,
+			);
+			path = Model;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -260,6 +271,7 @@
 			files = (
 				7943B0482629EE8900DAC838 /* ViewController.swift in Sources */,
 				7943B0442629EE8900DAC838 /* AppDelegate.swift in Sources */,
+				794C4E382629F98F005A3496 /* AdModel.swift in Sources */,
 				7943B0462629EE8900DAC838 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
