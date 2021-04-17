@@ -10,24 +10,95 @@ import XCTest
 
 class TheGoodCornerTests: XCTestCase {
 
-    override func setUpWithError() throws {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
-    }
-
-    override func tearDownWithError() throws {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
-    }
-
-    func testExample() throws {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-    }
-
-    func testPerformanceExample() throws {
-        // This is an example of a performance test case.
-        self.measure {
-            // Put the code you want to measure the time of here.
+    func testGetAdShouldPostFailedCallbackIfError() {
+            // Given
+        
+        let adService = AdAPIService(adSession: URLSessionFake(data: nil, response: nil, error: FakeResponseDataAd.error))
+            
+            
+            // When
+            let expectation = XCTestExpectation(description: "Wait for queue change.")
+            
+            adService.apiToGetAd { (ads, error) in
+                
+                // Then
+                XCTAssertNil(ads)
+                XCTAssertNotNil(error)
+                expectation.fulfill()
+            }
+            
+            wait(for: [expectation], timeout: 1)
         }
-    }
-
+    
+    func testGetAdShouldPostFailedCallbackIfNoData() {
+            // Given
+        let adService = AdAPIService(adSession: URLSessionFake(data: nil, response: nil, error: nil))
+            
+            
+            // When
+            let expectation = XCTestExpectation(description: "Wait for queue change.")
+        
+            adService.apiToGetAd { (ads, error) in
+                // Then
+                XCTAssertNil(ads)
+                XCTAssertNil(error)
+                expectation.fulfill()
+            }
+            
+            wait(for: [expectation], timeout: 1)
+        }
+    
+    func testGetAdShouldPostFailedCallbackIfIncorrectResponse() {
+            // Given
+        let adService = AdAPIService(adSession: URLSessionFake(data: FakeResponseDataAd.adCorrectData, response: FakeResponseDataAd.responseKO, error: nil))
+            
+            
+            // When
+            let expectation = XCTestExpectation(description: "Wait for queue change.")
+            adService.apiToGetAd { (ads, error) in
+                // Then
+                XCTAssertNil(error)
+                expectation.fulfill()
+            }
+            
+            wait(for: [expectation], timeout: 1)
+        }
+    
+    func testGetAdShouldPostFailedCallbackIfIncorrectData() {
+            // Given
+        let adService = AdAPIService(adSession: URLSessionFake(data: FakeResponseDataAd.adIncorrectData, response: FakeResponseDataAd.responseOK, error: nil))
+            
+            
+            // When
+            let expectation = XCTestExpectation(description: "Wait for queue change.")
+            adService.apiToGetAd { (ads, error) in
+                // Then
+                XCTAssertNotNil(error)
+                let firstAdPrice = 140.00
+                
+                XCTAssertNotEqual(firstAdPrice, ads?[0].price)
+                expectation.fulfill()
+            }
+            
+            wait(for: [expectation], timeout: 1)
+        }
+    
+    func testGetAdShouldSuccessCallbackIfcorrectData() {
+            // Given
+        let adService = AdAPIService(adSession: URLSessionFake(data: FakeResponseDataAd.adCorrectData, response: FakeResponseDataAd.responseOK, error: nil))
+            
+            
+            // When
+            let expectation = XCTestExpectation(description: "Wait for queue change.")
+            adService.apiToGetAd { (ads, error) in
+                // Then
+                XCTAssertNil(error)
+                let firstAdPrice = 140.00
+                
+                XCTAssertEqual(firstAdPrice, ads?[0].price)
+                expectation.fulfill()
+            }
+            
+            wait(for: [expectation], timeout: 1)
+        }
 }

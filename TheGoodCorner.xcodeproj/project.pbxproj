@@ -9,6 +9,9 @@
 /* Begin PBXBuildFile section */
 		793F752F262AF582000A2D13 /* CategoryAPIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 793F752E262AF582000A2D13 /* CategoryAPIService.swift */; };
 		793F7534262AF676000A2D13 /* CategoryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 793F7533262AF676000A2D13 /* CategoryViewModel.swift */; };
+		793F753A262AFA54000A2D13 /* URLSessionFake.swift in Sources */ = {isa = PBXBuildFile; fileRef = 793F7539262AFA54000A2D13 /* URLSessionFake.swift */; };
+		793F7542262AFAE9000A2D13 /* FakeResponseDataAd.swift in Sources */ = {isa = PBXBuildFile; fileRef = 793F7541262AFAE9000A2D13 /* FakeResponseDataAd.swift */; };
+		793F7556262B0019000A2D13 /* Ad.json in Resources */ = {isa = PBXBuildFile; fileRef = 793F7555262B0019000A2D13 /* Ad.json */; };
 		7943B0442629EE8900DAC838 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7943B0432629EE8900DAC838 /* AppDelegate.swift */; };
 		7943B0462629EE8900DAC838 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7943B0452629EE8900DAC838 /* SceneDelegate.swift */; };
 		7943B0482629EE8900DAC838 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7943B0472629EE8900DAC838 /* ViewController.swift */; };
@@ -42,6 +45,9 @@
 /* Begin PBXFileReference section */
 		793F752E262AF582000A2D13 /* CategoryAPIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryAPIService.swift; sourceTree = "<group>"; };
 		793F7533262AF676000A2D13 /* CategoryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryViewModel.swift; sourceTree = "<group>"; };
+		793F7539262AFA54000A2D13 /* URLSessionFake.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLSessionFake.swift; sourceTree = "<group>"; };
+		793F7541262AFAE9000A2D13 /* FakeResponseDataAd.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakeResponseDataAd.swift; sourceTree = "<group>"; };
+		793F7555262B0019000A2D13 /* Ad.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Ad.json; sourceTree = "<group>"; };
 		7943B0402629EE8800DAC838 /* TheGoodCorner.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TheGoodCorner.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7943B0432629EE8900DAC838 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		7943B0452629EE8900DAC838 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -86,6 +92,24 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		793F7538262AF9E2000A2D13 /* FakeData */ = {
+			isa = PBXGroup;
+			children = (
+				793F7546262AFB4D000A2D13 /* FakeJson */,
+				793F7539262AFA54000A2D13 /* URLSessionFake.swift */,
+				793F7541262AFAE9000A2D13 /* FakeResponseDataAd.swift */,
+			);
+			path = FakeData;
+			sourceTree = "<group>";
+		};
+		793F7546262AFB4D000A2D13 /* FakeJson */ = {
+			isa = PBXGroup;
+			children = (
+				793F7555262B0019000A2D13 /* Ad.json */,
+			);
+			path = FakeJson;
+			sourceTree = "<group>";
+		};
 		7943B0372629EE8800DAC838 = {
 			isa = PBXGroup;
 			children = (
@@ -126,6 +150,7 @@
 		7943B0592629EE9600DAC838 /* TheGoodCornerTests */ = {
 			isa = PBXGroup;
 			children = (
+				793F7538262AF9E2000A2D13 /* FakeData */,
 				7943B05A2629EE9600DAC838 /* TheGoodCornerTests.swift */,
 				7943B05C2629EE9600DAC838 /* Info.plist */,
 			);
@@ -288,6 +313,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				793F7556262B0019000A2D13 /* Ad.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -321,6 +347,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				7943B05B2629EE9600DAC838 /* TheGoodCornerTests.swift in Sources */,
+				793F7542262AFAE9000A2D13 /* FakeResponseDataAd.swift in Sources */,
+				793F753A262AFA54000A2D13 /* URLSessionFake.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

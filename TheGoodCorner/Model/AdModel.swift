@@ -12,7 +12,7 @@ import Foundation
 struct Ad: Codable {
     let id, categoryID: Int?
     let title, description: String?
-    let price: Int?
+    let price: Double?
     let imagesURL: ImagesURL?
     let creationDate: String?
     let isUrgent: Bool?
@@ -59,7 +59,7 @@ struct Ad: Codable {
                     self.description = nil
                 }
         do {
-                    self.price = try values.decode(Int?.self, forKey: .price)
+                    self.price = try values.decode(Double?.self, forKey: .price)
                 } catch {
                     self.price = nil
                 }
