@@ -14,11 +14,11 @@ class AdViewModel : NSObject {
     
     private(set) var adData : [Ad]! {
         didSet {
-            self.bindEmployeeViewModelToController()
+            self.bindAdViewModelToController()
         }
     }
     
-    var bindEmployeeViewModelToController : (() -> ()) = {}
+    var bindAdViewModelToController : (() -> ()) = {}
     
     override init() {
         super.init()
@@ -30,7 +30,6 @@ class AdViewModel : NSObject {
         self.adApiService.apiToGetAd { (ad, error) in
             if let unwrapAds = ad {
                 self.adData = unwrapAds
-                print(unwrapAds)
             }
         }
     }

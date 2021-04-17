@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		793F752F262AF582000A2D13 /* CategoryAPIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 793F752E262AF582000A2D13 /* CategoryAPIService.swift */; };
+		793F7534262AF676000A2D13 /* CategoryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 793F7533262AF676000A2D13 /* CategoryViewModel.swift */; };
 		7943B0442629EE8900DAC838 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7943B0432629EE8900DAC838 /* AppDelegate.swift */; };
 		7943B0462629EE8900DAC838 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7943B0452629EE8900DAC838 /* SceneDelegate.swift */; };
 		7943B0482629EE8900DAC838 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7943B0472629EE8900DAC838 /* ViewController.swift */; };
@@ -38,6 +40,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		793F752E262AF582000A2D13 /* CategoryAPIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryAPIService.swift; sourceTree = "<group>"; };
+		793F7533262AF676000A2D13 /* CategoryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryViewModel.swift; sourceTree = "<group>"; };
 		7943B0402629EE8800DAC838 /* TheGoodCorner.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TheGoodCorner.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7943B0432629EE8900DAC838 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		7943B0452629EE8900DAC838 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -149,6 +153,7 @@
 			isa = PBXGroup;
 			children = (
 				794C4E46262A16C5005A3496 /* AdViewModel.swift */,
+				793F7533262AF676000A2D13 /* CategoryViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -157,6 +162,7 @@
 			isa = PBXGroup;
 			children = (
 				794C4E4C262A1913005A3496 /* AdAPIService.swift */,
+				793F752E262AF582000A2D13 /* CategoryAPIService.swift */,
 			);
 			path = "API Service";
 			sourceTree = "<group>";
@@ -301,7 +307,9 @@
 			files = (
 				794C4E47262A16C5005A3496 /* AdViewModel.swift in Sources */,
 				794C4E4D262A1913005A3496 /* AdAPIService.swift in Sources */,
+				793F752F262AF582000A2D13 /* CategoryAPIService.swift in Sources */,
 				7943B0482629EE8900DAC838 /* ViewController.swift in Sources */,
+				793F7534262AF676000A2D13 /* CategoryViewModel.swift in Sources */,
 				7943B0442629EE8900DAC838 /* AppDelegate.swift in Sources */,
 				794C4E382629F98F005A3496 /* AdModel.swift in Sources */,
 				7943B0462629EE8900DAC838 /* SceneDelegate.swift in Sources */,

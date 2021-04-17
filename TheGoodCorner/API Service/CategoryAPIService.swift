@@ -1,25 +1,25 @@
 //
-//  AdAPIService.swift
+//  CategoryAPIService.swift
 //  TheGoodCorner
 //
-//  Created by Vigneswaranathan Sugeethkumar on 16/04/2021.
+//  Created by Vigneswaranathan Sugeethkumar on 17/04/2021.
 //
 
 import Foundation
 
-class AdAPIService: NSObject {
-    private let adSourcesURL = URL(string: "https://raw.githubusercontent.com/leboncoin/paperclip/master/listing.json")!
+class CategoryAPIService: NSObject {
+    private let categorySourcesURL = URL(string: "https://raw.githubusercontent.com/leboncoin/paperclip/master/categories.json")!
     
-    private var adSession = URLSession(configuration: .default)
+    private var categorySession = URLSession(configuration: .default)
     
-        init(adSession: URLSession) {
-            self.adSession = adSession
+        init(categorySession: URLSession) {
+            self.categorySession = categorySession
         }
         
-        func apiToGetAd(completionHandler: @escaping ([Ad]?, Error?) -> Void) {
-            let request = createAdRequest()
+        func apiToGetCategory(completionHandler: @escaping ([Category]?, Error?) -> Void) {
+            let request = createCategoryRequest()
             
-            let task = adSession.dataTask(with: request) { (data, response, error) in
+            let task = categorySession.dataTask(with: request) { (data, response, error) in
                 DispatchQueue.main.async {
                     guard let data = data, error == nil else {
                         
@@ -36,7 +36,7 @@ class AdAPIService: NSObject {
                     }
                     do {
                         
-                        let responseJSON = try JSONDecoder().decode([Ad].self, from: data)
+                        let responseJSON = try JSONDecoder().decode([Category].self, from: data)
                         
                         completionHandler(responseJSON, nil)
                         
@@ -49,8 +49,8 @@ class AdAPIService: NSObject {
             task.resume()
         }
         
-        func createAdRequest() -> URLRequest {
-            let request = URLRequest(url: adSourcesURL)
+        func createCategoryRequest() -> URLRequest {
+            let request = URLRequest(url: categorySourcesURL)
             
             return request
         }
