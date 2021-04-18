@@ -7,6 +7,7 @@
 
 import UIKit
 
+
 class HomeViewController: UIViewController {
     //MARK: ViewModel
     private var adViewModel : AdViewModel?
@@ -64,28 +65,24 @@ class HomeViewController: UIViewController {
         // Do any additional setup after loading the view.
         
         // Add to View
+        showActivityIndicator()
         setupNoAdTitleLabl()
         setupNoAdLabl()
         setupNoItemImage()
         setupCategoryCollectionView()
         setGradientBackground()
-    
         hideNoItemMsg()
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        showActivityIndicator()
-        
         if Reachability.isConnectedToNetwork() {
             callToViewModelForUIUpdate()
             callToCategoryViewModelForUIUpdate()
         } else {
+            activityIndicator.stopAnimating()
+            showNoItemMsg()
             showAlertNoInternet()
         }
     }
     
     //MARK: Setup View
-    
     func setupCategoryCollectionView() {
             view.addSubview(adsCollectionView)
             adsCollectionView.delegate = self
@@ -146,6 +143,7 @@ class HomeViewController: UIViewController {
     
     //MARK: UI Update
     func callToViewModelForUIUpdate() {
+        // init View Model and loading data
         self.adViewModel = AdViewModel()
         
         if let unwrapadViewModel = self.adViewModel {
@@ -167,6 +165,7 @@ class HomeViewController: UIViewController {
     }
     
     func callToCategoryViewModelForUIUpdate() {
+        // init View Model and loading data
         self.categoryViewModel = CategoryViewModel()
         
         if let unwrapCategoryViewModel = self.categoryViewModel {
@@ -218,39 +217,13 @@ class HomeViewController: UIViewController {
     }
     //MARK: Alert
     func showAlertNoInternet() {
-        let alert = UIAlertController(title: Constants.ErrorString.alertTitle,
-                                      message: Constants.ErrorString.alertNoInternetMsg,
-                                      preferredStyle: UIAlertController.Style.alert)
-        
-        alert.addAction(UIAlertAction(title: Constants.ErrorString.okAction,
-                                      style: UIAlertAction.Style.default,
-                                      handler: nil))
-        
-        self.present(alert,
-                     animated: true,
-                     completion: nil)
-    }
-    
-    //MARK: Func
-    func getData(from url: URL, completion: @escaping (Data?, URLResponse?, Error?) -> ()) {
-        URLSession.shared.dataTask(with: url, completionHandler: completion).resume()
-    }
-    
-    func downloadImage(from url: URL, imageView: UIImageView) {
-        print("Download Started")
-        getData(from: url) { data, response, error in
-            DispatchQueue.main.async {
-                guard let data = data, error == nil else {
-                    
-                    return
-                }
-                
-                guard let response = response as? HTTPURLResponse, response.statusCode == 200 else {
-                    
-                    return
-                }
-                imageView.image = UIImage(data: data)
-            }
+        DispatchQueue.main.async {
+            let alert = UIAlertController(title: Constants.ErrorString.alertTitle, message: Constants.ErrorString.alertNoInternetMsg, preferredStyle: .alert)
+
+            let okAction = UIAlertAction(title: Constants.ErrorString.okAction, style: .cancel, handler: nil)
+
+            alert.addAction(okAction)
+            self.present(alert, animated: true, completion: nil)
         }
     }
 }
@@ -292,6 +265,7 @@ extension HomeViewController : UICollectionViewDelegate, UICollectionViewDataSou
             }
             
             if let unwrapPrice = unwrapAdViewModel.adData[indexPath.row].price {
+                // Adding thousand separator
                 priceItem = String(Int(unwrapPrice).formattedWithSeparator) + Constants.itemString.currecy
             }
             
@@ -306,17 +280,23 @@ extension HomeViewController : UICollectionViewDelegate, UICollectionViewDataSou
             }
             
             if let unwrapDateString = unwrapAdViewModel.adData[indexPath.row].creationDate {
+                // Convert String to date and change date format
                 if let unwrapDate = unwrapDateString.toDate() {
                     cell.dateLabel.text = unwrapDate.getFormattedDate(format: "dd MMM")
                 }
             }
             
+            
             if let unwrapUrlString = unwrapAdViewModel.adData[indexPath.row].imagesURL {
                 
                 let imgUrl = URL(string: unwrapUrlString.small)
-                
                 if let unwrapImgUrl = imgUrl {
-                    downloadImage(from: unwrapImgUrl, imageView: cell.ImageViewItem)
+                    // Download Image from url
+                    unwrapAdViewModel.callFuncToGetImageData(url: unwrapImgUrl, completionHandler: { (data, error) in
+                        if let unwrapData = data {
+                            cell.ImageViewItem.image = UIImage(data: unwrapData)
+                        }
+                    })
                 }
             }
         }

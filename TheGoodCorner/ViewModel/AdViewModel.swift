@@ -11,6 +11,7 @@ class AdViewModel : NSObject {
     
     private var adApiService : AdAPIService!
     var adService = AdAPIService(adSession: URLSession(configuration: .default))
+    var imageDownloaderService = ImageDownloaderService(imageSession: URLSession(configuration: .default))
     
     private(set) var adData : [Ad]! {
         didSet {
@@ -30,6 +31,16 @@ class AdViewModel : NSObject {
         self.adApiService.apiToGetAd { (ad, error) in
             if let unwrapAds = ad {
                 self.adData = unwrapAds
+            }
+        }
+    }
+    
+    func callFuncToGetImageData(url: URL, completionHandler: @escaping (Data?, Error?) -> Void) {
+        self.imageDownloaderService.imageLoader(url: url) { (data, error) in
+            if let unwrapData = data {
+                completionHandler(unwrapData,nil)
+            } else {
+                completionHandler(nil, error)
             }
         }
     }
