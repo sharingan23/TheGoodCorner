@@ -15,10 +15,19 @@ struct Constants {
     struct ImageString {
         static let noPhoto = "nophoto"
         static let noItem = "box"
+        static let urgent = "urgentStar"
     }
     
     struct ErrorString {
         static let oopsMsg = "Oopps..!"
-        static let noAdMsg = "Nous n'avons pas d'annonces sous la"
+        static let noAdMsg = "Nous n'avons pas d'annonces sous la main"
+        static let alertTitle = "TheGoodCorner"
+        static let alertNoInternetMsg = "vous n'etes pas connecté a internet"
+        static let okAction = "OK"
+    }
+    
+    struct itemString {
+        static let currecy = " €"
+        static let noValue = ""
     }
 }

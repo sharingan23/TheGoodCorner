@@ -19,7 +19,7 @@
 		793F75AE262B70F3000A2D13 /* AdCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 793F75AD262B70F3000A2D13 /* AdCell.swift */; };
 		793F75B6262B7CB0000A2D13 /* Extensions+UIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 793F75B5262B7CB0000A2D13 /* Extensions+UIColor.swift */; };
 		7943B0442629EE8900DAC838 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7943B0432629EE8900DAC838 /* AppDelegate.swift */; };
-		7943B0482629EE8900DAC838 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7943B0472629EE8900DAC838 /* ViewController.swift */; };
+		7943B0482629EE8900DAC838 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7943B0472629EE8900DAC838 /* HomeViewController.swift */; };
 		7943B04D2629EE9500DAC838 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7943B04C2629EE9500DAC838 /* Assets.xcassets */; };
 		7943B0502629EE9500DAC838 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7943B04E2629EE9500DAC838 /* LaunchScreen.storyboard */; };
 		7943B05B2629EE9600DAC838 /* TheGoodCornerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7943B05A2629EE9600DAC838 /* TheGoodCornerTests.swift */; };
@@ -27,6 +27,7 @@
 		794C4E382629F98F005A3496 /* AdModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 794C4E372629F98F005A3496 /* AdModel.swift */; };
 		794C4E47262A16C5005A3496 /* AdViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 794C4E46262A16C5005A3496 /* AdViewModel.swift */; };
 		794C4E4D262A1913005A3496 /* AdAPIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 794C4E4C262A1913005A3496 /* AdAPIService.swift */; };
+		79899665262C5DCF0016864C /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79899664262C5DCF0016864C /* Reachability.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -60,7 +61,7 @@
 		793F75B5262B7CB0000A2D13 /* Extensions+UIColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Extensions+UIColor.swift"; sourceTree = "<group>"; };
 		7943B0402629EE8800DAC838 /* TheGoodCorner.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TheGoodCorner.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7943B0432629EE8900DAC838 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		7943B0472629EE8900DAC838 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		7943B0472629EE8900DAC838 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		7943B04C2629EE9500DAC838 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		7943B04F2629EE9500DAC838 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		7943B0512629EE9500DAC838 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -73,6 +74,7 @@
 		794C4E372629F98F005A3496 /* AdModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdModel.swift; sourceTree = "<group>"; };
 		794C4E46262A16C5005A3496 /* AdViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdViewModel.swift; sourceTree = "<group>"; };
 		794C4E4C262A1913005A3496 /* AdAPIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdAPIService.swift; sourceTree = "<group>"; };
+		79899664262C5DCF0016864C /* Reachability.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -160,6 +162,7 @@
 		7943B0422629EE8800DAC838 /* TheGoodCorner */ = {
 			isa = PBXGroup;
 			children = (
+				79899663262C5DB30016864C /* Utilities */,
 				793F75AC262B70CB000A2D13 /* Cell */,
 				793F75A5262B6F78000A2D13 /* Custom */,
 				794C4E4B262A18C8005A3496 /* API Service */,
@@ -223,9 +226,17 @@
 		794C4E54262A20C4005A3496 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
-				7943B0472629EE8900DAC838 /* ViewController.swift */,
+				7943B0472629EE8900DAC838 /* HomeViewController.swift */,
 			);
 			path = Controller;
+			sourceTree = "<group>";
+		};
+		79899663262C5DB30016864C /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				79899664262C5DCF0016864C /* Reachability.swift */,
+			);
+			path = Utilities;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -363,9 +374,10 @@
 				794C4E47262A16C5005A3496 /* AdViewModel.swift in Sources */,
 				794C4E4D262A1913005A3496 /* AdAPIService.swift in Sources */,
 				793F752F262AF582000A2D13 /* CategoryAPIService.swift in Sources */,
-				7943B0482629EE8900DAC838 /* ViewController.swift in Sources */,
+				7943B0482629EE8900DAC838 /* HomeViewController.swift in Sources */,
 				793F7534262AF676000A2D13 /* CategoryViewModel.swift in Sources */,
 				7943B0442629EE8900DAC838 /* AppDelegate.swift in Sources */,
+				79899665262C5DCF0016864C /* Reachability.swift in Sources */,
 				794C4E382629F98F005A3496 /* AdModel.swift in Sources */,
 				793F75A8262B6FDF000A2D13 /* Constants.swift in Sources */,
 				793F75B6262B7CB0000A2D13 /* Extensions+UIColor.swift in Sources */,

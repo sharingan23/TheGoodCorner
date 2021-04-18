@@ -8,7 +8,7 @@
 import UIKit
 
 class AdCell: UICollectionViewCell {
-    //MARK: Variables
+    //MARK: Label
     var titleLabel:UILabel = {
         let label = UILabel()
         label.textAlignment = .left
@@ -23,6 +23,17 @@ class AdCell: UICollectionViewCell {
     var priceLabel:UILabel = {
         let label = UILabel()
         label.textAlignment = .left
+        label.textColor = UIColor.black
+        label.adjustsFontSizeToFitWidth = false
+        label.lineBreakMode = .byTruncatingTail
+        label.font = UIFont.systemFont(ofSize: 14)
+        label.numberOfLines = 0
+        return label
+    }()
+    
+    var categoryLabel:UILabel = {
+        let label = UILabel()
+        label.textAlignment = .left
         label.textColor = UIColor.gray
         label.adjustsFontSizeToFitWidth = false
         label.lineBreakMode = .byTruncatingTail
@@ -31,11 +42,21 @@ class AdCell: UICollectionViewCell {
         return label
     }()
     
+    //MARK: ImageView
+    
     let ImageViewItem: UIImageView = {
         let theImageView = UIImageView()
         theImageView.backgroundColor = .clear
-        theImageView.contentMode = .scaleToFill
+        theImageView.contentMode = .scaleAspectFit
         theImageView.image = UIImage(named: Constants.ImageString.noPhoto)
+        return theImageView
+    }()
+    
+    let urgentImageView: UIImageView = {
+        let theImageView = UIImageView()
+        theImageView.backgroundColor = .clear
+        theImageView.contentMode = .scaleAspectFit
+        theImageView.image = UIImage(named: Constants.ImageString.urgent)
         return theImageView
     }()
 
@@ -58,12 +79,12 @@ class AdCell: UICollectionViewCell {
         setupTitleLabl()
         imageViewItemConstraints()
         setupPriceLabel()
+        setupCategoryLabel()
+        setupUrgentLabel()
     }
     
     func imageViewItemConstraints() {
         ImageViewItem.translatesAutoresizingMaskIntoConstraints = false
-        //ImageViewItem.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: 10).isActive = true
-        //ImageViewItem.centerYAnchor.constraint(equalTo: self.contentView.centerYAnchor).isActive = true
         ImageViewItem.bottomAnchor.constraint(equalTo:   self.contentView.bottomAnchor, constant: -80).isActive = true
         ImageViewItem.topAnchor.constraint(equalTo:   self.contentView.topAnchor, constant: 40).isActive = true
         ImageViewItem.leftAnchor.constraint(equalTo:   self.contentView.leftAnchor, constant: 10).isActive = true
@@ -92,10 +113,35 @@ class AdCell: UICollectionViewCell {
     
     func priceLabelConstraints() {
         priceLabel.translatesAutoresizingMaskIntoConstraints = false
-        //titleLabel.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: 10).isActive = true
         priceLabel.leftAnchor.constraint(equalTo: self.contentView.leftAnchor, constant: 20).isActive = true
         priceLabel.topAnchor.constraint(equalTo:   titleLabel.bottomAnchor, constant: 5).isActive = true
         priceLabel.rightAnchor.constraint(equalTo: self.contentView.rightAnchor,constant: -20).isActive = true
+    }
+    
+    func setupCategoryLabel() {
+        self.addSubview(self.categoryLabel)
+        
+        categoryLabelConstraints()
+    }
+    
+    func categoryLabelConstraints() {
+        categoryLabel.translatesAutoresizingMaskIntoConstraints = false
+        categoryLabel.topAnchor.constraint(equalTo:   titleLabel.bottomAnchor, constant: 5).isActive = true
+        categoryLabel.rightAnchor.constraint(equalTo: self.contentView.rightAnchor,constant: -20).isActive = true
+    }
+    
+    func setupUrgentLabel() {
+        self.addSubview(self.urgentImageView)
+        
+        urgentImageConstraints()
+    }
+    
+    func urgentImageConstraints() {
+        urgentImageView.translatesAutoresizingMaskIntoConstraints = false
+        urgentImageView.topAnchor.constraint(equalTo:   self.contentView.topAnchor, constant: 5).isActive = true
+        urgentImageView.widthAnchor.constraint(equalToConstant: 30).isActive = true
+        urgentImageView.heightAnchor.constraint(equalToConstant: 30).isActive = true
+        urgentImageView.rightAnchor.constraint(equalTo: self.contentView.rightAnchor,constant: -10).isActive = true
     }
  
 }

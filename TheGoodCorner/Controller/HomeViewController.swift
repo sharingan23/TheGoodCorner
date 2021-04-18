@@ -7,13 +7,13 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+class HomeViewController: UIViewController {
     //MARK: ViewModel
     private var adViewModel : AdViewModel?
     private var categoryViewModel : CategoryViewModel?
     
-    //MARK: Variables
-    let categoryCollectionView: UICollectionView = {
+    //MARK: UIView
+    let adsCollectionView: UICollectionView = {
             let layout = UICollectionViewFlowLayout()
             layout.scrollDirection = .vertical
             let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
@@ -21,6 +21,9 @@ class ViewController: UIViewController {
             return cv
         }()
     
+    let activityIndicator = UIActivityIndicatorView(style: UIActivityIndicatorView.Style.gray)
+    
+    //MARK: Label
     var noAdTitleLabel:UILabel = {
         let label = UILabel()
         label.textAlignment = .left
@@ -45,6 +48,7 @@ class ViewController: UIViewController {
         return label
     }()
     
+    //MARK: Images
     let NoItemImageView: UIImageView = {
         let theImageView = UIImageView()
         theImageView.backgroundColor = .clear
@@ -58,33 +62,46 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
+        
+        // Add to View
         setupNoAdTitleLabl()
         setupNoAdLabl()
         setupNoItemImage()
         setupCategoryCollectionView()
-        callToViewModelForUIUpdate()
-        callToCategoryViewModelForUIUpdate()
         setGradientBackground()
+    
+        hideNoItemMsg()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        showActivityIndicator()
+        
+        if Reachability.isConnectedToNetwork() {
+            callToViewModelForUIUpdate()
+            callToCategoryViewModelForUIUpdate()
+        } else {
+            showAlertNoInternet()
+        }
     }
     
     //MARK: Setup View
     
     func setupCategoryCollectionView() {
-            view.addSubview(categoryCollectionView)
-            categoryCollectionView.delegate = self
-            categoryCollectionView.dataSource = self
-            categoryCollectionView.register(AdCell.self,
+            view.addSubview(adsCollectionView)
+            adsCollectionView.delegate = self
+            adsCollectionView.dataSource = self
+            adsCollectionView.register(AdCell.self,
                                             forCellWithReuseIdentifier: Constants.CellID.adCellID)
             
             categoryCollectionConstraints()
         }
     
     func categoryCollectionConstraints() {
-        categoryCollectionView.translatesAutoresizingMaskIntoConstraints = false
-        categoryCollectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
-        categoryCollectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
-        categoryCollectionView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 10).isActive = true
-        categoryCollectionView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        adsCollectionView.translatesAutoresizingMaskIntoConstraints = false
+        adsCollectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
+        adsCollectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        adsCollectionView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 10).isActive = true
+        adsCollectionView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
     }
     
     func setupNoAdTitleLabl(){
@@ -126,7 +143,7 @@ class ViewController: UIViewController {
         NoItemImageView.widthAnchor.constraint(equalToConstant: 120).isActive = true
         NoItemImageView.centerXAnchor.constraint(equalTo: noAdTitleLabel.centerXAnchor).isActive = true
     }
- 
+    
     //MARK: UI Update
     func callToViewModelForUIUpdate() {
         self.adViewModel = AdViewModel()
@@ -139,10 +156,12 @@ class ViewController: UIViewController {
                     } else {
                         self.showNoItemMsg()
                     }
-                    self.categoryCollectionView.reloadData()
+                    self.adsCollectionView.reloadData()
+                    self.activityIndicator.stopAnimating()
                 }
             }
         } else {
+            self.activityIndicator.stopAnimating()
             showNoItemMsg()
         }
     }
@@ -167,22 +186,53 @@ class ViewController: UIViewController {
     }
     
     func showNoItemMsg() {
-        categoryCollectionView.isHidden = true
+        adsCollectionView.isHidden = true
         NoItemImageView.isHidden = false
         noAdTitleLabel.isHidden = false
         noAdLabel.isHidden = false
     }
     
     func hideNoItemMsg() {
-        categoryCollectionView.isHidden = false
+        adsCollectionView.isHidden = false
         NoItemImageView.isHidden = true
         noAdTitleLabel.isHidden = true
         noAdLabel.isHidden = true
     }
-
+    
+    func showActivityIndicator() {
+        activityIndicator.translatesAutoresizingMaskIntoConstraints = false
+        
+        view.addSubview(activityIndicator)
+        activityIndicator
+            .centerXAnchor
+            .constraint(equalTo: view.centerXAnchor)
+            .isActive = true
+        
+        activityIndicator
+            .centerYAnchor
+            .constraint(equalTo: view.centerYAnchor)
+            .isActive = true
+        
+        activityIndicator.hidesWhenStopped = true
+        activityIndicator.startAnimating()
+    }
+    //MARK: Alert
+    func showAlertNoInternet() {
+        let alert = UIAlertController(title: Constants.ErrorString.alertTitle,
+                                      message: Constants.ErrorString.alertNoInternetMsg,
+                                      preferredStyle: UIAlertController.Style.alert)
+        
+        alert.addAction(UIAlertAction(title: Constants.ErrorString.okAction,
+                                      style: UIAlertAction.Style.default,
+                                      handler: nil))
+        
+        self.present(alert,
+                     animated: true,
+                     completion: nil)
+    }
 }
 
-extension ViewController : UICollectionViewDelegate, UICollectionViewDataSource,UICollectionViewDelegateFlowLayout {
+extension HomeViewController : UICollectionViewDelegate, UICollectionViewDataSource,UICollectionViewDelegateFlowLayout {
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if let unwrapAdViewModel = adViewModel {
@@ -204,10 +254,35 @@ extension ViewController : UICollectionViewDelegate, UICollectionViewDataSource,
                         fatalError("DequeueReusableCell failed while casting")
                 }
         
+        var priceItem = Constants.itemString.noValue
+        var titleItem = Constants.itemString.noValue
+        var categoryItem = Constants.itemString.noValue
+        
+        cell.urgentImageView.isHidden = true
+        
         if let unwrapAdViewModel = adViewModel {
-            cell.titleLabel.text = unwrapAdViewModel.adData[indexPath.row].title
-            cell.priceLabel.text = String(unwrapAdViewModel.adData[indexPath.row].price!)
+            if let unwrapTitle = unwrapAdViewModel.adData[indexPath.row].title {
+                titleItem = unwrapTitle
+            }
+            
+            if let unwrapPrice = unwrapAdViewModel.adData[indexPath.row].price {
+                priceItem = String(Int(unwrapPrice).formattedWithSeparator) + Constants.itemString.currecy
+            }
+            
+            if let unwrapCategory = unwrapAdViewModel.adData[indexPath.row].categoryID {
+                categoryItem = String(unwrapCategory)
+            }
+            
+            if let unwrapUrgent = unwrapAdViewModel.adData[indexPath.row].isUrgent {
+                if unwrapUrgent {
+                    cell.urgentImageView.isHidden = false
+                }
+            }
         }
+        
+        cell.titleLabel.text = titleItem
+        cell.priceLabel.text = priceItem
+        cell.categoryLabel.text = categoryItem
         
         return cell
     }

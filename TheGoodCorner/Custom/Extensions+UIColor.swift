@@ -15,3 +15,16 @@ extension UIColor {
     static let backgroundViewColor = UIColor.rgb(redCG: 167, greenCG: 189, blueCG: 217)
     static let backgroundAdCellColor = UIColor.rgb(redCG: 255, greenCG: 255, blueCG: 255)
 }
+
+extension Formatter {
+    static let withSeparator: NumberFormatter = {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .decimal
+        formatter.groupingSeparator = " "
+        return formatter
+    }()
+}
+
+extension Numeric {
+    var formattedWithSeparator: String { Formatter.withSeparator.string(for: self) ?? "" }
+}
