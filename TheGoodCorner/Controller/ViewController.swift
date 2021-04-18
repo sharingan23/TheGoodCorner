@@ -9,27 +9,62 @@ import UIKit
 
 class ViewController: UIViewController {
     //MARK: ViewModel
-    private var adViewModel : AdViewModel!
-    private var categoryViewModel : CategoryViewModel!
+    private var adViewModel : AdViewModel?
+    private var categoryViewModel : CategoryViewModel?
     
     //MARK: Variables
     let categoryCollectionView: UICollectionView = {
             let layout = UICollectionViewFlowLayout()
             layout.scrollDirection = .vertical
             let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
-            cv.backgroundColor = .lightGray
+            cv.backgroundColor = .clear
             return cv
         }()
+    
+    var noAdTitleLabel:UILabel = {
+        let label = UILabel()
+        label.textAlignment = .left
+        label.textColor = UIColor.darkGray
+        label.adjustsFontSizeToFitWidth = false
+        label.lineBreakMode = .byTruncatingTail
+        label.font = UIFont.boldSystemFont(ofSize: 28)
+        label.text = Constants.ErrorString.oopsMsg
+        label.numberOfLines = 0
+        return label
+    }()
+    
+    var noAdLabel:UILabel = {
+        let label = UILabel()
+        label.textAlignment = .center
+        label.textColor = UIColor.darkGray
+        label.adjustsFontSizeToFitWidth = false
+        label.lineBreakMode = .byTruncatingTail
+        label.font = UIFont.boldSystemFont(ofSize: 20)
+        label.text = Constants.ErrorString.noAdMsg
+        label.numberOfLines = 0
+        return label
+    }()
+    
+    let NoItemImageView: UIImageView = {
+        let theImageView = UIImageView()
+        theImageView.backgroundColor = .clear
+        theImageView.contentMode = .scaleAspectFill
+        theImageView.image = UIImage(named: Constants.ImageString.noItem)
+        return theImageView
+    }()
     
     
     //MARK: ViewController Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
-        view.backgroundColor = UIColor.blue
+        setupNoAdTitleLabl()
+        setupNoAdLabl()
+        setupNoItemImage()
         setupCategoryCollectionView()
         callToViewModelForUIUpdate()
         callToCategoryViewModelForUIUpdate()
+        setGradientBackground()
     }
     
     //MARK: Setup View
@@ -51,14 +86,98 @@ class ViewController: UIViewController {
         categoryCollectionView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 10).isActive = true
         categoryCollectionView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
     }
+    
+    func setupNoAdTitleLabl(){
+        view.addSubview(self.noAdTitleLabel)
+        
+        noAdTitleLablConstraints()
+    }
+    
+    func noAdTitleLablConstraints() {
+        noAdTitleLabel.translatesAutoresizingMaskIntoConstraints = false
+        noAdTitleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        noAdTitleLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
+    }
+    
+    func setupNoAdLabl(){
+        view.addSubview(self.noAdLabel)
+        
+        noAdLablConstraints()
+    }
+    
+    func noAdLablConstraints() {
+        noAdLabel.translatesAutoresizingMaskIntoConstraints = false
+        noAdLabel.topAnchor.constraint(equalTo: noAdTitleLabel.bottomAnchor,constant: 10).isActive = true
+        noAdLabel.rightAnchor.constraint(equalTo: view.rightAnchor,constant: -10).isActive = true
+        noAdLabel.leftAnchor.constraint(equalTo: view.leftAnchor,constant: 10).isActive = true
+        noAdLabel.centerXAnchor.constraint(equalTo: noAdTitleLabel.centerXAnchor).isActive = true
+    }
+    
+    func setupNoItemImage(){
+        view.addSubview(self.NoItemImageView)
+        
+        noItemImageConstraints()
+    }
+    
+    func noItemImageConstraints() {
+        NoItemImageView.translatesAutoresizingMaskIntoConstraints = false
+        NoItemImageView.bottomAnchor.constraint(equalTo: noAdTitleLabel.topAnchor,constant: -10).isActive = true
+        NoItemImageView.heightAnchor.constraint(equalToConstant: 120).isActive = true
+        NoItemImageView.widthAnchor.constraint(equalToConstant: 120).isActive = true
+        NoItemImageView.centerXAnchor.constraint(equalTo: noAdTitleLabel.centerXAnchor).isActive = true
+    }
  
     //MARK: UI Update
     func callToViewModelForUIUpdate() {
         self.adViewModel = AdViewModel()
+        
+        if let unwrapadViewModel = self.adViewModel {
+            unwrapadViewModel.bindAdViewModelToController = {
+                DispatchQueue.main.async {
+                    if unwrapadViewModel.adData != nil && unwrapadViewModel.adData.count != 0 {
+                        self.hideNoItemMsg()
+                    } else {
+                        self.showNoItemMsg()
+                    }
+                    self.categoryCollectionView.reloadData()
+                }
+            }
+        } else {
+            showNoItemMsg()
+        }
     }
     
     func callToCategoryViewModelForUIUpdate() {
         self.categoryViewModel = CategoryViewModel()
+        
+        if let unwrapCategoryViewModel = self.categoryViewModel {
+        }
+    }
+    
+    func setGradientBackground() {
+        let colorTop =  UIColor(red: 33/255.0, green: 147/255.0, blue: 176/255.0, alpha: 1.0).cgColor
+        let colorBottom = UIColor(red: 109/255.0, green: 213/255.0, blue: 237/255.0, alpha: 1.0).cgColor
+                    
+        let gradientLayer = CAGradientLayer()
+        gradientLayer.colors = [colorTop, colorBottom]
+        gradientLayer.locations = [0.0, 1.0]
+        gradientLayer.frame = self.view.bounds
+                
+        self.view.layer.insertSublayer(gradientLayer, at:0)
+    }
+    
+    func showNoItemMsg() {
+        categoryCollectionView.isHidden = true
+        NoItemImageView.isHidden = false
+        noAdTitleLabel.isHidden = false
+        noAdLabel.isHidden = false
+    }
+    
+    func hideNoItemMsg() {
+        categoryCollectionView.isHidden = false
+        NoItemImageView.isHidden = true
+        noAdTitleLabel.isHidden = true
+        noAdLabel.isHidden = true
     }
 
 }
@@ -66,8 +185,15 @@ class ViewController: UIViewController {
 extension ViewController : UICollectionViewDelegate, UICollectionViewDataSource,UICollectionViewDelegateFlowLayout {
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 20
-        
+        if let unwrapAdViewModel = adViewModel {
+            if unwrapAdViewModel.adData != nil {
+                return  unwrapAdViewModel.adData.count
+            } else {
+                return 0
+            }
+        } else {
+            return 0
+        }
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -78,8 +204,10 @@ extension ViewController : UICollectionViewDelegate, UICollectionViewDataSource,
                         fatalError("DequeueReusableCell failed while casting")
                 }
         
-        cell.titleLabel.text = "\(indexPath.row)"
-        cell.backgroundColor = .white
+        if let unwrapAdViewModel = adViewModel {
+            cell.titleLabel.text = unwrapAdViewModel.adData[indexPath.row].title
+            cell.priceLabel.text = String(unwrapAdViewModel.adData[indexPath.row].price!)
+        }
         
         return cell
     }
@@ -88,8 +216,13 @@ extension ViewController : UICollectionViewDelegate, UICollectionViewDataSource,
         
         let padding: CGFloat =  10
         let collectionViewSize = collectionView.frame.size.width - padding
-
-        return CGSize(width: collectionViewSize/2, height: collectionViewSize/2)
+        
+        if ((indexPath.row % 2) != 0) {
+            
+        } else {
+            
+        }
+        
+        return CGSize(width: collectionViewSize/2, height: collectionViewSize/1.2)
     }
 }
-
