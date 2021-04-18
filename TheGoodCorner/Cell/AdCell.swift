@@ -42,6 +42,17 @@ class AdCell: UICollectionViewCell {
         return label
     }()
     
+    var dateLabel:UILabel = {
+        let label = UILabel()
+        label.textAlignment = .left
+        label.textColor = UIColor.gray
+        label.adjustsFontSizeToFitWidth = false
+        label.lineBreakMode = .byTruncatingTail
+        label.font = UIFont.systemFont(ofSize: 14)
+        label.numberOfLines = 0
+        return label
+    }()
+    
     //MARK: ImageView
     
     let ImageViewItem: UIImageView = {
@@ -71,16 +82,19 @@ class AdCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    //MARK: Setup View
+    //MARK: Setup ImageView
     
     func setupImageItemView() {
         self.addSubview(ImageViewItem)
         
         setupTitleLabl()
         imageViewItemConstraints()
+        
         setupPriceLabel()
         setupCategoryLabel()
-        setupUrgentLabel()
+        
+        setupDateLabel()
+        setupUrgentImage()
     }
     
     func imageViewItemConstraints() {
@@ -89,6 +103,22 @@ class AdCell: UICollectionViewCell {
         ImageViewItem.topAnchor.constraint(equalTo:   self.contentView.topAnchor, constant: 40).isActive = true
         ImageViewItem.leftAnchor.constraint(equalTo:   self.contentView.leftAnchor, constant: 10).isActive = true
         ImageViewItem.centerXAnchor.constraint(equalTo: self.contentView.centerXAnchor).isActive = true
+    }
+    
+    func setupUrgentImage() {
+        self.addSubview(self.urgentImageView)
+        
+        urgentImageConstraints()
+    }
+    
+    //MARK: Setup Label
+    
+    func urgentImageConstraints() {
+        urgentImageView.translatesAutoresizingMaskIntoConstraints = false
+        urgentImageView.topAnchor.constraint(equalTo:   self.contentView.topAnchor, constant: 5).isActive = true
+        urgentImageView.widthAnchor.constraint(equalToConstant: 30).isActive = true
+        urgentImageView.heightAnchor.constraint(equalToConstant: 30).isActive = true
+        urgentImageView.rightAnchor.constraint(equalTo: self.contentView.rightAnchor,constant: -10).isActive = true
     }
     
     func setupTitleLabl(){
@@ -130,18 +160,15 @@ class AdCell: UICollectionViewCell {
         categoryLabel.rightAnchor.constraint(equalTo: self.contentView.rightAnchor,constant: -20).isActive = true
     }
     
-    func setupUrgentLabel() {
-        self.addSubview(self.urgentImageView)
+    func setupDateLabel() {
+        self.addSubview(self.dateLabel)
         
-        urgentImageConstraints()
+        categoryDateConstraints()
     }
     
-    func urgentImageConstraints() {
-        urgentImageView.translatesAutoresizingMaskIntoConstraints = false
-        urgentImageView.topAnchor.constraint(equalTo:   self.contentView.topAnchor, constant: 5).isActive = true
-        urgentImageView.widthAnchor.constraint(equalToConstant: 30).isActive = true
-        urgentImageView.heightAnchor.constraint(equalToConstant: 30).isActive = true
-        urgentImageView.rightAnchor.constraint(equalTo: self.contentView.rightAnchor,constant: -10).isActive = true
+    func categoryDateConstraints() {
+        dateLabel.translatesAutoresizingMaskIntoConstraints = false
+        dateLabel.topAnchor.constraint(equalTo:   self.contentView.topAnchor, constant: 5).isActive = true
+        dateLabel.leftAnchor.constraint(equalTo: self.contentView.leftAnchor,constant: 20).isActive = true
     }
- 
 }

@@ -9,6 +9,7 @@ import UIKit
 
 extension UIColor {
     static func rgb(redCG: CGFloat, greenCG: CGFloat, blueCG: CGFloat) -> UIColor {
+        
         return UIColor(red: redCG/255, green: greenCG/255, blue: blueCG/255, alpha: 1)
     }
     
@@ -18,13 +19,36 @@ extension UIColor {
 
 extension Formatter {
     static let withSeparator: NumberFormatter = {
+        
         let formatter = NumberFormatter()
         formatter.numberStyle = .decimal
         formatter.groupingSeparator = " "
+        
         return formatter
     }()
 }
 
 extension Numeric {
     var formattedWithSeparator: String { Formatter.withSeparator.string(for: self) ?? "" }
+}
+
+extension Date {
+   func getFormattedDate(format: String) -> String {
+    
+        let dateformat = DateFormatter()
+        dateformat.dateFormat = format
+    
+        return dateformat.string(from: self)
+    }
+}
+
+extension String {
+    func toDate()-> Date? {
+        let isoDate = self
+        
+        let dateFormatter = ISO8601DateFormatter()
+        let date = dateFormatter.date(from:isoDate)
+        
+        return date
+    }
 }

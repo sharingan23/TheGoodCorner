@@ -28,6 +28,7 @@
 		794C4E47262A16C5005A3496 /* AdViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 794C4E46262A16C5005A3496 /* AdViewModel.swift */; };
 		794C4E4D262A1913005A3496 /* AdAPIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 794C4E4C262A1913005A3496 /* AdAPIService.swift */; };
 		79899665262C5DCF0016864C /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79899664262C5DCF0016864C /* Reachability.swift */; };
+		79899679262C99EF0016864C /* ImageDownloaderService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79899678262C99EF0016864C /* ImageDownloaderService.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -75,6 +76,7 @@
 		794C4E46262A16C5005A3496 /* AdViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdViewModel.swift; sourceTree = "<group>"; };
 		794C4E4C262A1913005A3496 /* AdAPIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdAPIService.swift; sourceTree = "<group>"; };
 		79899664262C5DCF0016864C /* Reachability.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
+		79899678262C99EF0016864C /* ImageDownloaderService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageDownloaderService.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -219,6 +221,7 @@
 			children = (
 				794C4E4C262A1913005A3496 /* AdAPIService.swift */,
 				793F752E262AF582000A2D13 /* CategoryAPIService.swift */,
+				79899678262C99EF0016864C /* ImageDownloaderService.swift */,
 			);
 			path = "API Service";
 			sourceTree = "<group>";
@@ -372,6 +375,7 @@
 			files = (
 				793F75AE262B70F3000A2D13 /* AdCell.swift in Sources */,
 				794C4E47262A16C5005A3496 /* AdViewModel.swift in Sources */,
+				79899679262C99EF0016864C /* ImageDownloaderService.swift in Sources */,
 				794C4E4D262A1913005A3496 /* AdAPIService.swift in Sources */,
 				793F752F262AF582000A2D13 /* CategoryAPIService.swift in Sources */,
 				7943B0482629EE8900DAC838 /* HomeViewController.swift in Sources */,

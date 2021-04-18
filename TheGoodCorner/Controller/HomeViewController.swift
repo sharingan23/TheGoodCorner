@@ -230,6 +230,29 @@ class HomeViewController: UIViewController {
                      animated: true,
                      completion: nil)
     }
+    
+    //MARK: Func
+    func getData(from url: URL, completion: @escaping (Data?, URLResponse?, Error?) -> ()) {
+        URLSession.shared.dataTask(with: url, completionHandler: completion).resume()
+    }
+    
+    func downloadImage(from url: URL, imageView: UIImageView) {
+        print("Download Started")
+        getData(from: url) { data, response, error in
+            DispatchQueue.main.async {
+                guard let data = data, error == nil else {
+                    
+                    return
+                }
+                
+                guard let response = response as? HTTPURLResponse, response.statusCode == 200 else {
+                    
+                    return
+                }
+                imageView.image = UIImage(data: data)
+            }
+        }
+    }
 }
 
 extension HomeViewController : UICollectionViewDelegate, UICollectionViewDataSource,UICollectionViewDelegateFlowLayout {
@@ -257,8 +280,11 @@ extension HomeViewController : UICollectionViewDelegate, UICollectionViewDataSou
         var priceItem = Constants.itemString.noValue
         var titleItem = Constants.itemString.noValue
         var categoryItem = Constants.itemString.noValue
+        var dateItem = Constants.itemString.noValue
         
         cell.urgentImageView.isHidden = true
+        
+        cell.ImageViewItem.image = UIImage(named: Constants.ImageString.noPhoto)
         
         if let unwrapAdViewModel = adViewModel {
             if let unwrapTitle = unwrapAdViewModel.adData[indexPath.row].title {
@@ -276,6 +302,21 @@ extension HomeViewController : UICollectionViewDelegate, UICollectionViewDataSou
             if let unwrapUrgent = unwrapAdViewModel.adData[indexPath.row].isUrgent {
                 if unwrapUrgent {
                     cell.urgentImageView.isHidden = false
+                }
+            }
+            
+            if let unwrapDateString = unwrapAdViewModel.adData[indexPath.row].creationDate {
+                if let unwrapDate = unwrapDateString.toDate() {
+                    cell.dateLabel.text = unwrapDate.getFormattedDate(format: "dd MMM")
+                }
+            }
+            
+            if let unwrapUrlString = unwrapAdViewModel.adData[indexPath.row].imagesURL {
+                
+                let imgUrl = URL(string: unwrapUrlString.small)
+                
+                if let unwrapImgUrl = imgUrl {
+                    downloadImage(from: unwrapImgUrl, imageView: cell.ImageViewItem)
                 }
             }
         }
