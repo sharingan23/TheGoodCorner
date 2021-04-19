@@ -31,6 +31,8 @@ class HomeViewController: UIViewController {
         return cv
     }()
     
+    var searchBar = UISearchBar()
+    
     let activityIndicator = UIActivityIndicatorView(style: UIActivityIndicatorView.Style.gray)
     
     //MARK: Label
@@ -76,6 +78,11 @@ class HomeViewController: UIViewController {
         return theImageView
     }()
     
+    //MARK: Int
+    var indexSelectedCategoryCell = 0
+    
+    //MARK: Filtered Local Data
+    var filteredLocalData: [Ad]?
     
     //MARK: ViewController Cycle
     override func viewDidLoad() {
@@ -83,6 +90,7 @@ class HomeViewController: UIViewController {
         // Do any additional setup after loading the view.
         
         // Add to View
+        navBarBackground()
         showActivityIndicator()
         setupNoAdTitleLabl()
         setupNoAdLabl()
@@ -197,6 +205,17 @@ class HomeViewController: UIViewController {
         NoItemImageView.centerXAnchor.constraint(equalTo: noAdTitleLabel.centerXAnchor).isActive = true
     }
     
+    func navBarBackground() {
+        //set Searchbar
+        searchBar.sizeToFit()
+        navigationItem.titleView = searchBar
+        searchBar.placeholder = "Que recherche-vous ?"
+        
+        self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
+        self.navigationController?.navigationBar.shadowImage = UIImage()
+        self.navigationController?.navigationBar.isTranslucent = true
+    }
+    
     //MARK: UI Update
     func callToViewModelForUIUpdate() {
         // init View Model and loading data
@@ -207,6 +226,7 @@ class HomeViewController: UIViewController {
                 DispatchQueue.main.async {
                     if unwrapadViewModel.adData != nil && unwrapadViewModel.adData.count != 0 {
                         self.hideNoItemMsg()
+                        self.filteredLocalData = unwrapadViewModel.adData
                     } else {
                         self.showNoItemMsg()
                     }
@@ -235,8 +255,8 @@ class HomeViewController: UIViewController {
     }
     
     func setGradientBackground() {
-        let colorTop =  UIColor(red: 33/255.0, green: 147/255.0, blue: 176/255.0, alpha: 1.0).cgColor
-        let colorBottom = UIColor(red: 109/255.0, green: 213/255.0, blue: 237/255.0, alpha: 1.0).cgColor
+        let colorTop =  UIColor(red: 254/255.0, green: 95/255.0, blue: 117/255.0, alpha: 1.0).cgColor
+        let colorBottom = UIColor(red: 252/255.0, green: 152/255.0, blue: 0/255.0, alpha: 1.0).cgColor
                     
         let gradientLayer = CAGradientLayer()
         gradientLayer.colors = [colorTop, colorBottom]
@@ -246,6 +266,7 @@ class HomeViewController: UIViewController {
         self.view.layer.insertSublayer(gradientLayer, at:0)
     }
     
+    //MARK: function to hide or show msg if no ads.
     func showNoItemMsg() {
         adsCollectionView.isHidden = true
         NoItemImageView.isHidden = false
@@ -258,6 +279,17 @@ class HomeViewController: UIViewController {
         NoItemImageView.isHidden = true
         noAdTitleLabel.isHidden = true
         noAdLabel.isHidden = true
+    }
+    
+    //MARK: State handler of Category CollectionView
+    func stateHandlerCategoryCollectionView(cell: CategoryCell,isSelected: Bool) {
+        if isSelected {
+            cell.backgroundColor = UIColor.white
+            cell.categoryLabel.textColor = UIColor.unSelectedCategoryBackgroundLblColor
+        } else {
+            cell.backgroundColor = UIColor.unSelectedCategoryBackgroundLblColor
+            cell.categoryLabel.textColor = UIColor.white
+        }
     }
     
     func showActivityIndicator() {
@@ -308,15 +340,11 @@ extension HomeViewController : UICollectionViewDelegate, UICollectionViewDataSou
             }
             
         case adsCollectionView:
-            if let unwrapAdViewModel = adViewModel {
-                if unwrapAdViewModel.adData != nil {
-                    return  unwrapAdViewModel.adData.count
+                if let unwrapFilteredData = filteredLocalData {
+                    return unwrapFilteredData.count
                 } else {
                     return 0
                 }
-            } else {
-                return 0
-            }
         default:
             return 0
         }
@@ -330,6 +358,12 @@ extension HomeViewController : UICollectionViewDelegate, UICollectionViewDataSou
                     else {
                             fatalError("DequeueReusableCell failed while casting")
                     }
+            
+            stateHandlerCategoryCollectionView(cell: categoryCell, isSelected: false)
+            
+            if indexSelectedCategoryCell == indexPath.row {
+                stateHandlerCategoryCollectionView(cell: categoryCell, isSelected: true)
+            }
             
             categoryCell.categoryLabel.text = Constants.itemString.noValue
             
@@ -357,17 +391,18 @@ extension HomeViewController : UICollectionViewDelegate, UICollectionViewDataSou
             cell.ImageViewItem.image = UIImage(named: Constants.ImageString.noPhoto)
             
             if let unwrapAdViewModel = adViewModel {
-                if let unwrapTitle = unwrapAdViewModel.adData[indexPath.row].title {
+            if let unwrapFilteredAd = filteredLocalData {
+                if let unwrapTitle = unwrapFilteredAd[indexPath.row].title {
                     titleItem = unwrapTitle
                 }
                 
-                if let unwrapPrice = unwrapAdViewModel.adData[indexPath.row].price {
+                if let unwrapPrice = unwrapFilteredAd[indexPath.row].price {
                     // Adding thousand separator
                     priceItem = String(Int(unwrapPrice).formattedWithSeparator) + Constants.itemString.currecy
                 }
                 
                 //Get id of category from ViewModel
-                if let unwrapCategoryID = unwrapAdViewModel.adData[indexPath.row].categoryID {
+                if let unwrapCategoryID = unwrapFilteredAd[indexPath.row].categoryID {
 
                     if let unwrapCategoryViewModel = categoryViewModel {
                         //Get Name of the category from id with ViewModel
@@ -377,13 +412,13 @@ extension HomeViewController : UICollectionViewDelegate, UICollectionViewDataSou
                     }
                 }
                 
-                if let unwrapIsUrgent = unwrapAdViewModel.adData[indexPath.row].isUrgent {
+                if let unwrapIsUrgent = unwrapFilteredAd[indexPath.row].isUrgent {
                     if unwrapIsUrgent {
                         cell.urgentImageView.isHidden = false
                     }
                 }
                 
-                if let unwrapDateString = unwrapAdViewModel.adData[indexPath.row].creationDate {
+                if let unwrapDateString = unwrapFilteredAd[indexPath.row].creationDate {
                     // Convert String to date and change date format
                     if let unwrapDate = unwrapDateString.toDate() {
                         cell.dateLabel.text = unwrapDate.getFormattedDate(format: "dd MMM")
@@ -391,16 +426,17 @@ extension HomeViewController : UICollectionViewDelegate, UICollectionViewDataSou
                 }
                 
                 
-                if let unwrapUrlString = unwrapAdViewModel.adData[indexPath.row].imagesURL {
+                if let unwrapUrlString = unwrapFilteredAd[indexPath.row].imagesURL {
                     
                     let imgUrl = URL(string: unwrapUrlString.small)
                     if let unwrapImgUrl = imgUrl {
                         // Download Image from url
-                        unwrapAdViewModel.callFuncToGetImageData(url: unwrapImgUrl, completionHandler: { (data, error) in
-                            if let unwrapData = data {
-                                cell.ImageViewItem.image = UIImage(data: unwrapData)
-                            }
-                        })
+                            unwrapAdViewModel.callFuncToGetImageData(url: unwrapImgUrl, completionHandler: { (data, error) in
+                                if let unwrapData = data {
+                                    cell.ImageViewItem.image = UIImage(data: unwrapData)
+                                }
+                            })
+                        }
                     }
                 }
             }
@@ -425,6 +461,10 @@ extension HomeViewController : UICollectionViewDelegate, UICollectionViewDataSou
                                 label.text = unwrapCategoryData[indexPath.row].name
                                 label.sizeToFit()
                         widthCell = Int(label.frame.width)
+                        // Handle too small Widht Cell
+                        if widthCell < 50 {
+                            widthCell = 55
+                        }
                     }
                 }
                 return CGSize(width: widthCell, height: 35)
@@ -445,5 +485,23 @@ extension HomeViewController : UICollectionViewDelegate, UICollectionViewDataSou
         }
         
         return CGSize(width: 0, height: 0)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        filteredLocalData = nil
+        if collectionView == categoryCollectionView {
+            indexSelectedCategoryCell = indexPath.row
+            
+            if let unwrapCategoryViewModel = categoryViewModel {
+                if let unwrapCategoryData = unwrapCategoryViewModel.categoryData {
+                    
+                    if let unwrapAdViewModel = adViewModel {
+                       filteredLocalData = unwrapAdViewModel.filterByCategory(arrayAd: unwrapAdViewModel.adData, category: unwrapCategoryData[indexPath.row])
+                        adsCollectionView.reloadData()
+                    }
+                }
+            }
+            categoryCollectionView.reloadData()
+        }
     }
 }

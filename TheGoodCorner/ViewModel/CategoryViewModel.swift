@@ -29,14 +29,18 @@ class CategoryViewModel : NSObject {
     func callFuncToGetCategoryData() {
         self.categoryApiService.apiToGetCategory { (categories, error) in
             if let unwrapCategories = categories {
-                self.categoryData = unwrapCategories
+                self.categoryData = [Category(id: 0, name: Constants.itemString.allFilter)] + unwrapCategories
             }
         }
     }
     
     func getCategoryFromInt(id: Int) -> String? {
-        if let foundCategory = categoryData.first(where: {$0.id == id}) {
-            return foundCategory.name
+        if let unwrapCategoryData = categoryData {
+            if let foundCategory = unwrapCategoryData.first(where: {$0.id == id}) {
+                return foundCategory.name
+            } else {
+                return nil
+            }
         } else {
             return nil
         }

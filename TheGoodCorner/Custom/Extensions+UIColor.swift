@@ -15,6 +15,8 @@ extension UIColor {
     
     static let backgroundViewColor = UIColor.rgb(redCG: 167, greenCG: 189, blueCG: 217)
     static let backgroundAdCellColor = UIColor.rgb(redCG: 255, greenCG: 255, blueCG: 255)
+    static let selectedCategoryBackgroundLblColor = UIColor.white
+    static let unSelectedCategoryBackgroundLblColor = UIColor.rgb(redCG: 128, greenCG: 85, blueCG: 91)
 }
 
 extension Formatter {

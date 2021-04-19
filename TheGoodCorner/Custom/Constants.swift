@@ -30,5 +30,6 @@ struct Constants {
     struct itemString {
         static let currecy = " €"
         static let noValue = ""
+        static let allFilter = "Tous"
     }
 }

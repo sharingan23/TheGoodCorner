@@ -44,4 +44,13 @@ class AdViewModel : NSObject {
             }
         }
     }
+    
+    func filterByCategory(arrayAd: [Ad], category: Category) -> [Ad] {
+        var filteredArrayAd = arrayAd
+        if category.id != 0 {
+            filteredArrayAd = arrayAd.filter { $0.categoryID == category.id }
+        }
+        
+        return filteredArrayAd
+    }
 }

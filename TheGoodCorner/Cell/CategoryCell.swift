@@ -42,7 +42,7 @@ class CategoryCell: UICollectionViewCell {
         categoryLabel.translatesAutoresizingMaskIntoConstraints = false
         categoryLabel.centerYAnchor.constraint(equalTo: self.contentView.centerYAnchor, constant: 0).isActive = true
         categoryLabel.centerXAnchor.constraint(equalTo: self.contentView.centerXAnchor, constant: 0).isActive = true
-        categoryLabel.rightAnchor.constraint(equalTo: self.contentView.rightAnchor,constant: -5).isActive = true
-        categoryLabel.leftAnchor.constraint(equalTo: self.contentView.leftAnchor,constant: 5).isActive = true
+        categoryLabel.rightAnchor.constraint(equalTo: self.contentView.rightAnchor,constant: 0).isActive = true
+        categoryLabel.leftAnchor.constraint(equalTo: self.contentView.leftAnchor,constant: 0).isActive = true
     }
 }
