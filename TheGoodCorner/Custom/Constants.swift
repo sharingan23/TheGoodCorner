@@ -10,6 +10,7 @@ import Foundation
 struct Constants {
     struct CellID {
         static let adCellID = "adCellID"
+        static let categoryCellID = "categoryCellID"
     }
     
     struct ImageString {

@@ -75,7 +75,16 @@ class AdCell: UICollectionViewCell {
         super.init(frame: frame)
         self.backgroundColor = UIColor.backgroundAdCellColor
         self.layer.cornerRadius = 20
+        
         setupImageItemView()
+        setupTitleLabl()
+        imageViewItemConstraints()
+        
+        setupPriceLabel()
+        setupCategoryLabel()
+        
+        setupDateLabel()
+        setupUrgentImage()
     }
     
     required init?(coder: NSCoder) {
@@ -87,14 +96,7 @@ class AdCell: UICollectionViewCell {
     func setupImageItemView() {
         self.addSubview(ImageViewItem)
         
-        setupTitleLabl()
         imageViewItemConstraints()
-        
-        setupPriceLabel()
-        setupCategoryLabel()
-        
-        setupDateLabel()
-        setupUrgentImage()
     }
     
     func imageViewItemConstraints() {
@@ -129,7 +131,6 @@ class AdCell: UICollectionViewCell {
     
     func titleLabelConstraints() {
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
-        //titleLabel.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: 10).isActive = true
         titleLabel.leftAnchor.constraint(equalTo: self.contentView.leftAnchor, constant: 20).isActive = true
         titleLabel.topAnchor.constraint(equalTo:   ImageViewItem.bottomAnchor, constant: 5).isActive = true
         titleLabel.rightAnchor.constraint(equalTo: self.contentView.rightAnchor,constant: -20).isActive = true

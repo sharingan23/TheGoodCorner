@@ -15,12 +15,21 @@ class HomeViewController: UIViewController {
     
     //MARK: UIView
     let adsCollectionView: UICollectionView = {
-            let layout = UICollectionViewFlowLayout()
-            layout.scrollDirection = .vertical
-            let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
-            cv.backgroundColor = .clear
-            return cv
-        }()
+        let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .vertical
+        let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        cv.backgroundColor = .clear
+        return cv
+    }()
+    
+    let categoryCollectionView: UICollectionView = {
+        let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .horizontal
+        let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        cv.showsHorizontalScrollIndicator = false
+        cv.backgroundColor = .clear
+        return cv
+    }()
     
     let activityIndicator = UIActivityIndicatorView(style: UIActivityIndicatorView.Style.gray)
     
@@ -33,6 +42,15 @@ class HomeViewController: UIViewController {
         label.lineBreakMode = .byTruncatingTail
         label.font = UIFont.boldSystemFont(ofSize: 28)
         label.text = Constants.ErrorString.oopsMsg
+        label.numberOfLines = 0
+        return label
+    }()
+    
+    var borderLabel:UILabel = {
+        let label = UILabel()
+        label.textAlignment = .left
+        label.backgroundColor = UIColor.lightGray
+        label.adjustsFontSizeToFitWidth = false
         label.numberOfLines = 0
         return label
     }()
@@ -70,8 +88,12 @@ class HomeViewController: UIViewController {
         setupNoAdLabl()
         setupNoItemImage()
         setupCategoryCollectionView()
+        setupBorderLabl()
+        setupAdsCollectionView()
         setGradientBackground()
         hideNoItemMsg()
+        
+        //Check if internet is available
         if Reachability.isConnectedToNetwork() {
             callToViewModelForUIUpdate()
             callToCategoryViewModelForUIUpdate()
@@ -82,25 +104,44 @@ class HomeViewController: UIViewController {
         }
     }
     
-    //MARK: Setup View
-    func setupCategoryCollectionView() {
+    //MARK: Setup UICollectionView
+    func setupAdsCollectionView() {
             view.addSubview(adsCollectionView)
             adsCollectionView.delegate = self
             adsCollectionView.dataSource = self
             adsCollectionView.register(AdCell.self,
                                             forCellWithReuseIdentifier: Constants.CellID.adCellID)
             
-            categoryCollectionConstraints()
+            adsCollectionConstraints()
         }
     
-    func categoryCollectionConstraints() {
+    func adsCollectionConstraints() {
         adsCollectionView.translatesAutoresizingMaskIntoConstraints = false
-        adsCollectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
+        adsCollectionView.topAnchor.constraint(equalTo: borderLabel.bottomAnchor, constant: 0).isActive = true
         adsCollectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
         adsCollectionView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 10).isActive = true
         adsCollectionView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
     }
     
+    func setupCategoryCollectionView() {
+        view.addSubview(categoryCollectionView)
+        categoryCollectionView.delegate = self
+        categoryCollectionView.dataSource = self
+        categoryCollectionView.register(CategoryCell.self,
+                                        forCellWithReuseIdentifier: Constants.CellID.categoryCellID)
+            
+        categoryCollectionConstraints()
+    }
+    
+    func categoryCollectionConstraints() {
+        categoryCollectionView.translatesAutoresizingMaskIntoConstraints = false
+        categoryCollectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
+        categoryCollectionView.heightAnchor.constraint(equalToConstant: 45).isActive = true
+        categoryCollectionView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 10).isActive = true
+        categoryCollectionView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+    }
+    
+    //MARK: Setup Label
     func setupNoAdTitleLabl(){
         view.addSubview(self.noAdTitleLabel)
         
@@ -111,6 +152,20 @@ class HomeViewController: UIViewController {
         noAdTitleLabel.translatesAutoresizingMaskIntoConstraints = false
         noAdTitleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         noAdTitleLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
+    }
+    
+    func setupBorderLabl(){
+        view.addSubview(self.borderLabel)
+        
+        borderLablConstraints()
+    }
+    
+    func borderLablConstraints() {
+        borderLabel.translatesAutoresizingMaskIntoConstraints = false
+        borderLabel.topAnchor.constraint(equalTo: categoryCollectionView.bottomAnchor, constant: 0).isActive = true
+        borderLabel.rightAnchor.constraint(equalTo: view.rightAnchor,constant: 0).isActive = true
+        borderLabel.leftAnchor.constraint(equalTo: view.leftAnchor,constant: 0).isActive = true
+        borderLabel.heightAnchor.constraint(equalToConstant: 1).isActive = true
     }
     
     func setupNoAdLabl(){
@@ -127,6 +182,7 @@ class HomeViewController: UIViewController {
         noAdLabel.centerXAnchor.constraint(equalTo: noAdTitleLabel.centerXAnchor).isActive = true
     }
     
+    //MARK: Setup UIImageView
     func setupNoItemImage(){
         view.addSubview(self.NoItemImageView)
         
@@ -169,6 +225,12 @@ class HomeViewController: UIViewController {
         self.categoryViewModel = CategoryViewModel()
         
         if let unwrapCategoryViewModel = self.categoryViewModel {
+            unwrapCategoryViewModel.bindCategoryViewModelToController = {
+                DispatchQueue.main.async {
+                    self.categoryCollectionView.reloadData()
+                }
+
+            }
         }
     }
     
@@ -215,6 +277,7 @@ class HomeViewController: UIViewController {
         activityIndicator.hidesWhenStopped = true
         activityIndicator.startAnimating()
     }
+    
     //MARK: Alert
     func showAlertNoInternet() {
         DispatchQueue.main.async {
@@ -228,97 +291,159 @@ class HomeViewController: UIViewController {
     }
 }
 
+//MARK: Extension UICollectionView
 extension HomeViewController : UICollectionViewDelegate, UICollectionViewDataSource,UICollectionViewDelegateFlowLayout {
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        if let unwrapAdViewModel = adViewModel {
-            if unwrapAdViewModel.adData != nil {
-                return  unwrapAdViewModel.adData.count
+        switch collectionView {
+        case categoryCollectionView:
+            if let unwrapCategoryViewModel = categoryViewModel {
+                if let unwrapCategoryData = unwrapCategoryViewModel.categoryData {
+                    return unwrapCategoryData.count
+                } else {
+                    return 0
+                }
             } else {
                 return 0
             }
-        } else {
+            
+        case adsCollectionView:
+            if let unwrapAdViewModel = adViewModel {
+                if unwrapAdViewModel.adData != nil {
+                    return  unwrapAdViewModel.adData.count
+                } else {
+                    return 0
+                }
+            } else {
+                return 0
+            }
+        default:
             return 0
         }
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Constants.CellID.adCellID,
-                                                               for: indexPath) as? AdCell
-                else {
-                        fatalError("DequeueReusableCell failed while casting")
-                }
-        
-        var priceItem = Constants.itemString.noValue
-        var titleItem = Constants.itemString.noValue
-        var categoryItem = Constants.itemString.noValue
-        var dateItem = Constants.itemString.noValue
-        
-        cell.urgentImageView.isHidden = true
-        
-        cell.ImageViewItem.image = UIImage(named: Constants.ImageString.noPhoto)
-        
-        if let unwrapAdViewModel = adViewModel {
-            if let unwrapTitle = unwrapAdViewModel.adData[indexPath.row].title {
-                titleItem = unwrapTitle
-            }
+        // Category CollectionView
+        if collectionView == categoryCollectionView {
+            guard let categoryCell = collectionView.dequeueReusableCell(withReuseIdentifier: Constants.CellID.categoryCellID,
+                                                                   for: indexPath) as? CategoryCell
+                    else {
+                            fatalError("DequeueReusableCell failed while casting")
+                    }
             
-            if let unwrapPrice = unwrapAdViewModel.adData[indexPath.row].price {
-                // Adding thousand separator
-                priceItem = String(Int(unwrapPrice).formattedWithSeparator) + Constants.itemString.currecy
-            }
+            categoryCell.categoryLabel.text = Constants.itemString.noValue
             
-            if let unwrapCategory = unwrapAdViewModel.adData[indexPath.row].categoryID {
-                categoryItem = String(unwrapCategory)
-            }
-            
-            if let unwrapUrgent = unwrapAdViewModel.adData[indexPath.row].isUrgent {
-                if unwrapUrgent {
-                    cell.urgentImageView.isHidden = false
+            if let unwrapCategoryViewModel = categoryViewModel {
+                if let unwrapCategoryData = unwrapCategoryViewModel.categoryData {
+                    categoryCell.categoryLabel.text = unwrapCategoryData[indexPath.row].name
                 }
             }
             
-            if let unwrapDateString = unwrapAdViewModel.adData[indexPath.row].creationDate {
-                // Convert String to date and change date format
-                if let unwrapDate = unwrapDateString.toDate() {
-                    cell.dateLabel.text = unwrapDate.getFormattedDate(format: "dd MMM")
+            return categoryCell
+        } else {
+            // Ad CollectionView
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Constants.CellID.adCellID,
+                                                                   for: indexPath) as? AdCell
+                    else {
+                            fatalError("DequeueReusableCell failed while casting")
+                    }
+        
+            var priceItem = Constants.itemString.noValue
+            var titleItem = Constants.itemString.noValue
+            var categoryItem = Constants.itemString.noValue
+            
+            cell.urgentImageView.isHidden = true
+            
+            cell.ImageViewItem.image = UIImage(named: Constants.ImageString.noPhoto)
+            
+            if let unwrapAdViewModel = adViewModel {
+                if let unwrapTitle = unwrapAdViewModel.adData[indexPath.row].title {
+                    titleItem = unwrapTitle
                 }
-            }
-            
-            
-            if let unwrapUrlString = unwrapAdViewModel.adData[indexPath.row].imagesURL {
                 
-                let imgUrl = URL(string: unwrapUrlString.small)
-                if let unwrapImgUrl = imgUrl {
-                    // Download Image from url
-                    unwrapAdViewModel.callFuncToGetImageData(url: unwrapImgUrl, completionHandler: { (data, error) in
-                        if let unwrapData = data {
-                            cell.ImageViewItem.image = UIImage(data: unwrapData)
+                if let unwrapPrice = unwrapAdViewModel.adData[indexPath.row].price {
+                    // Adding thousand separator
+                    priceItem = String(Int(unwrapPrice).formattedWithSeparator) + Constants.itemString.currecy
+                }
+                
+                //Get id of category from ViewModel
+                if let unwrapCategoryID = unwrapAdViewModel.adData[indexPath.row].categoryID {
+
+                    if let unwrapCategoryViewModel = categoryViewModel {
+                        //Get Name of the category from id with ViewModel
+                        if let category = unwrapCategoryViewModel.getCategoryFromInt(id: unwrapCategoryID) {
+                            categoryItem = category
                         }
-                    })
+                    }
+                }
+                
+                if let unwrapIsUrgent = unwrapAdViewModel.adData[indexPath.row].isUrgent {
+                    if unwrapIsUrgent {
+                        cell.urgentImageView.isHidden = false
+                    }
+                }
+                
+                if let unwrapDateString = unwrapAdViewModel.adData[indexPath.row].creationDate {
+                    // Convert String to date and change date format
+                    if let unwrapDate = unwrapDateString.toDate() {
+                        cell.dateLabel.text = unwrapDate.getFormattedDate(format: "dd MMM")
+                    }
+                }
+                
+                
+                if let unwrapUrlString = unwrapAdViewModel.adData[indexPath.row].imagesURL {
+                    
+                    let imgUrl = URL(string: unwrapUrlString.small)
+                    if let unwrapImgUrl = imgUrl {
+                        // Download Image from url
+                        unwrapAdViewModel.callFuncToGetImageData(url: unwrapImgUrl, completionHandler: { (data, error) in
+                            if let unwrapData = data {
+                                cell.ImageViewItem.image = UIImage(data: unwrapData)
+                            }
+                        })
+                    }
                 }
             }
+            
+            cell.titleLabel.text = titleItem
+            cell.priceLabel.text = priceItem
+            cell.categoryLabel.text = categoryItem
+            
+            return cell
         }
-        
-        cell.titleLabel.text = titleItem
-        cell.priceLabel.text = priceItem
-        cell.categoryLabel.text = categoryItem
-        
-        return cell
     }
-
+    
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         
-        let padding: CGFloat =  10
-        let collectionViewSize = collectionView.frame.size.width - padding
-        
-        if ((indexPath.row % 2) != 0) {
+        switch collectionView {
+        case categoryCollectionView:
+            if collectionView == categoryCollectionView {
+                var widthCell = 70
+                if let unwrapCategoryViewModel = categoryViewModel {
+                    if let unwrapCategoryData = unwrapCategoryViewModel.categoryData {
+                        let label = UILabel(frame: CGRect.zero)
+                                label.text = unwrapCategoryData[indexPath.row].name
+                                label.sizeToFit()
+                        widthCell = Int(label.frame.width)
+                    }
+                }
+                return CGSize(width: widthCell, height: 35)
+            }
+        case adsCollectionView:
             
-        } else {
+            let padding: CGFloat =  10
+            let collectionViewSize = collectionView.frame.size.width - padding
             
+            if ((indexPath.row % 2) != 0) {
+                
+            } else {
+                
+            }
+            return CGSize(width: collectionViewSize/2, height: collectionViewSize/1.2)
+        default:
+            return CGSize(width: 0, height: 0)
         }
         
-        return CGSize(width: collectionViewSize/2, height: collectionViewSize/1.2)
+        return CGSize(width: 0, height: 0)
     }
 }

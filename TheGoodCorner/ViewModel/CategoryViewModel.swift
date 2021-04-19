@@ -33,4 +33,12 @@ class CategoryViewModel : NSObject {
             }
         }
     }
+    
+    func getCategoryFromInt(id: Int) -> String? {
+        if let foundCategory = categoryData.first(where: {$0.id == id}) {
+            return foundCategory.name
+        } else {
+            return nil
+        }
+    }
 }

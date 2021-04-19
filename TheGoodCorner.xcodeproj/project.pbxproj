@@ -24,6 +24,7 @@
 		7943B0502629EE9500DAC838 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7943B04E2629EE9500DAC838 /* LaunchScreen.storyboard */; };
 		7943B05B2629EE9600DAC838 /* TheGoodCornerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7943B05A2629EE9600DAC838 /* TheGoodCornerTests.swift */; };
 		7943B0662629EE9600DAC838 /* TheGoodCornerUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7943B0652629EE9600DAC838 /* TheGoodCornerUITests.swift */; };
+		79496C75262DB5B70045F7E7 /* CategoryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79496C74262DB5B70045F7E7 /* CategoryCell.swift */; };
 		794C4E382629F98F005A3496 /* AdModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 794C4E372629F98F005A3496 /* AdModel.swift */; };
 		794C4E47262A16C5005A3496 /* AdViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 794C4E46262A16C5005A3496 /* AdViewModel.swift */; };
 		794C4E4D262A1913005A3496 /* AdAPIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 794C4E4C262A1913005A3496 /* AdAPIService.swift */; };
@@ -72,6 +73,7 @@
 		7943B0612629EE9600DAC838 /* TheGoodCornerUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TheGoodCornerUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		7943B0652629EE9600DAC838 /* TheGoodCornerUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TheGoodCornerUITests.swift; sourceTree = "<group>"; };
 		7943B0672629EE9600DAC838 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		79496C74262DB5B70045F7E7 /* CategoryCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryCell.swift; sourceTree = "<group>"; };
 		794C4E372629F98F005A3496 /* AdModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdModel.swift; sourceTree = "<group>"; };
 		794C4E46262A16C5005A3496 /* AdViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdViewModel.swift; sourceTree = "<group>"; };
 		794C4E4C262A1913005A3496 /* AdAPIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdAPIService.swift; sourceTree = "<group>"; };
@@ -137,6 +139,7 @@
 			isa = PBXGroup;
 			children = (
 				793F75AD262B70F3000A2D13 /* AdCell.swift */,
+				79496C74262DB5B70045F7E7 /* CategoryCell.swift */,
 			);
 			path = Cell;
 			sourceTree = "<group>";
@@ -373,6 +376,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				79496C75262DB5B70045F7E7 /* CategoryCell.swift in Sources */,
 				793F75AE262B70F3000A2D13 /* AdCell.swift in Sources */,
 				794C4E47262A16C5005A3496 /* AdViewModel.swift in Sources */,
 				79899679262C99EF0016864C /* ImageDownloaderService.swift in Sources */,
