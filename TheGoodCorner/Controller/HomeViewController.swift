@@ -223,20 +223,26 @@ class HomeViewController: UIViewController {
     func setSearchBarUI() {
         //set Searchbar
         searchBar.sizeToFit()
-        navigationItem.titleView = searchBar
-        searchBar.placeholder = "Que recherchez-vous ?"
-        
+        //navigationItem.titleView = searchBar
+        searchBar.placeholder = Constants.textString.searchPlaceholder
         searchBar.sizeToFit()
         searchBar.delegate = self
         
+        //set Urgent bar button
         navigationController?.navigationBar.tintColor = .white
         navigationController?.navigationBar.prefersLargeTitles = true
-        navigationItem.title = "TheGoodCorner"
+        navigationItem.title = Constants.textString.appName
         self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
         self.navigationController?.navigationBar.shadowImage = UIImage()
         self.navigationController?.navigationBar.isTranslucent = true
         showSearchBarButton(shouldShow: true)
+        search(shouldShow: true)
     }
+    
+    func urgentButonBar() {
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Urgent", style: .plain, target: self, action:  #selector(handleShowSearchBar))
+    }
+    
     
     func showSearchBarButton(shouldShow: Bool) {
             if shouldShow {
@@ -554,7 +560,7 @@ extension HomeViewController : UICollectionViewDelegate, UICollectionViewDataSou
             indexSelectedCategoryCell = indexPath.row
             
             // reset search bar text
-            searchBar.text = ""
+            searchBar.text = Constants.itemString.noValue
             
             if let unwrapCategoryViewModel = categoryViewModel {
                 if let unwrapCategoryData = unwrapCategoryViewModel.categoryData {
@@ -567,8 +573,15 @@ extension HomeViewController : UICollectionViewDelegate, UICollectionViewDataSou
             }
             categoryCollectionView.reloadData()
         }
+        
+        if collectionView == adsCollectionView {
+            if let navigator = navigationController {
+                navigator.pushViewController(DetailedViewController(), animated: true)
+            }
+        }
     }
 }
+
 
 extension HomeViewController: UISearchBarDelegate {
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
@@ -576,7 +589,7 @@ extension HomeViewController: UISearchBarDelegate {
     }
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        if searchText == "" {
+        if searchText == Constants.itemString.noValue {
             adsCollectionView.reloadData()
         } else {
             if let unwrapAdViewModel = adViewModel {

@@ -30,9 +30,41 @@ class AdViewModel : NSObject {
     func callFuncToGetAdData() {
         self.adApiService.apiToGetAd { (ad, error) in
             if let unwrapAds = ad {
-                self.adData = unwrapAds
+                
+              /*  var filteredArrayAdByUrgent = unwrapAds
+                
+                filteredArrayAdByUrgent = filteredArrayAdByUrgent.filter { ($0.isUrgent)! }
+
+                // Rearrange array by date
+                self.adData = filteredArrayAdByUrgent.sorted(by: { $0.creationDate! > $1.creationDate!})*/
+                
+                self.adData = self.filteredArrayByUrgent(ad: unwrapAds) + self.filteredArrayWithOutUrgent(ad: unwrapAds)
             }
         }
+    }
+    
+    func filteredArrayByUrgent(ad: [Ad]) -> [Ad] {
+        var filteredArrayAdByUrgent = ad
+        
+        // Only urgent item
+        filteredArrayAdByUrgent = filteredArrayAdByUrgent.filter { ($0.isUrgent)! }
+
+        // Rearrange array by date
+        filteredArrayAdByUrgent = filteredArrayAdByUrgent.sorted(by: { $0.creationDate! > $1.creationDate!})
+        
+        return filteredArrayAdByUrgent
+    }
+    
+    func filteredArrayWithOutUrgent(ad: [Ad]) -> [Ad] {
+        var filteredArrayAdByUrgent = ad
+        
+        // Only urgent item
+        filteredArrayAdByUrgent = filteredArrayAdByUrgent.filter { ($0.isUrgent == false) }
+
+        // Rearrange array by date
+        filteredArrayAdByUrgent = filteredArrayAdByUrgent.sorted(by: { $0.creationDate! > $1.creationDate!})
+        
+        return filteredArrayAdByUrgent
     }
     
     func callFuncToGetImageData(url: URL, completionHandler: @escaping (Data?, Error?) -> Void) {

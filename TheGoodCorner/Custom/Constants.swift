@@ -11,6 +11,9 @@ struct Constants {
     struct CellID {
         static let adCellID = "adCellID"
         static let categoryCellID = "categoryCellID"
+        static let detailImageCellID = "detailImageCellID"
+        static let detailCellID = "detaileCellID"
+        static let descriptionCellID = "descriptionCellID"
     }
     
     struct ImageString {
@@ -31,5 +34,10 @@ struct Constants {
         static let currecy = " €"
         static let noValue = ""
         static let allFilter = "Tous"
+    }
+    
+    struct textString {
+        static let searchPlaceholder = "Que recherchez-vous ?"
+        static let appName = "TheGoodCorner"
     }
 }
