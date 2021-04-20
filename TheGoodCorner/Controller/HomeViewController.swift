@@ -261,11 +261,11 @@ class HomeViewController: UIViewController {
         view.addGestureRecognizer(tap)
     }
     
-    //MARK: UI Update
+    //MARK: UI Update from ViewModel
     func callToViewModelForUIUpdate() {
         // init View Model and loading data
         self.adViewModel = AdViewModel()
-        
+        hideNoItemMsg()
         if let unwrapadViewModel = self.adViewModel {
             unwrapadViewModel.bindAdViewModelToController = {
                 DispatchQueue.main.async {
@@ -299,6 +299,7 @@ class HomeViewController: UIViewController {
         }
     }
     
+    //MARK: UI Set up
     func setGradientBackground() {
         let colorTop =  UIColor(red: 254/255.0, green: 95/255.0, blue: 117/255.0, alpha: 1.0).cgColor
         let colorBottom = UIColor(red: 252/255.0, green: 152/255.0, blue: 0/255.0, alpha: 1.0).cgColor
@@ -309,6 +310,13 @@ class HomeViewController: UIViewController {
         gradientLayer.frame = self.view.bounds
                 
         self.view.layer.insertSublayer(gradientLayer, at:0)
+    }
+    
+    func animationOnReloadData(collectionView: UICollectionView) {
+        UIView.transition(with: adsCollectionView,
+                          duration: 0.35,
+                          options: .transitionFlipFromLeft,
+                          animations: { self.adsCollectionView.reloadData() })
     }
     
     //MARK: function to hide or show msg if no ads.
@@ -540,8 +548,8 @@ extension HomeViewController : UICollectionViewDelegate, UICollectionViewDataSou
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        filteredLocalData = nil
         if collectionView == categoryCollectionView {
+            filteredLocalData = nil
             //Selected category indexy
             indexSelectedCategoryCell = indexPath.row
             
@@ -553,7 +561,7 @@ extension HomeViewController : UICollectionViewDelegate, UICollectionViewDataSou
                     
                     if let unwrapAdViewModel = adViewModel {
                        filteredLocalData = unwrapAdViewModel.filterByCategory(arrayAd: unwrapAdViewModel.adData, category: unwrapCategoryData[indexPath.row])
-                        adsCollectionView.reloadData()
+                        animationOnReloadData(collectionView: adsCollectionView)
                     }
                 }
             }
