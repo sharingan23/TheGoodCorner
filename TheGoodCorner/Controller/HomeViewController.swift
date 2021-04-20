@@ -90,7 +90,7 @@ class HomeViewController: UIViewController {
         // Do any additional setup after loading the view.
         
         // Add to View
-        navBarBackground()
+        setSearchBarUI()
         showActivityIndicator()
         setupNoAdTitleLabl()
         setupNoAdLabl()
@@ -101,6 +101,9 @@ class HomeViewController: UIViewController {
         setGradientBackground()
         hideNoItemMsg()
         
+        //Look for single or multiple tap
+        setTapRecognizer()
+        
         //Check if internet is available
         if Reachability.isConnectedToNetwork() {
             callToViewModelForUIUpdate()
@@ -110,6 +113,18 @@ class HomeViewController: UIViewController {
             showNoItemMsg()
             showAlertNoInternet()
         }
+    }
+    
+    //MARK: Selectors
+    @objc func handleShowSearchBar() {
+        searchBar.becomeFirstResponder()
+        search(shouldShow: true)
+    }
+    
+    @objc func dismissKeyboard() {
+        //Causes the view (or one of its embedded text fields) to resign the first responder status.
+        searchBar.resignFirstResponder()
+        view.endEditing(true)
     }
     
     //MARK: Setup UICollectionView
@@ -205,15 +220,45 @@ class HomeViewController: UIViewController {
         NoItemImageView.centerXAnchor.constraint(equalTo: noAdTitleLabel.centerXAnchor).isActive = true
     }
     
-    func navBarBackground() {
+    func setSearchBarUI() {
         //set Searchbar
         searchBar.sizeToFit()
         navigationItem.titleView = searchBar
-        searchBar.placeholder = "Que recherche-vous ?"
+        searchBar.placeholder = "Que recherchez-vous ?"
         
+        searchBar.sizeToFit()
+        searchBar.delegate = self
+        
+        navigationController?.navigationBar.tintColor = .white
+        navigationController?.navigationBar.prefersLargeTitles = true
+        navigationItem.title = "TheGoodCorner"
         self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
         self.navigationController?.navigationBar.shadowImage = UIImage()
         self.navigationController?.navigationBar.isTranslucent = true
+        showSearchBarButton(shouldShow: true)
+    }
+    
+    func showSearchBarButton(shouldShow: Bool) {
+            if shouldShow {
+                navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .search,
+                                                                    target: self,
+                                                                    action: #selector(handleShowSearchBar))
+            } else {
+                navigationItem.rightBarButtonItem = nil
+            }
+        }
+        
+        func search(shouldShow: Bool) {
+            showSearchBarButton(shouldShow: !shouldShow)
+            searchBar.showsCancelButton = shouldShow
+            navigationItem.titleView = shouldShow ? searchBar : nil
+        }
+    
+    func setTapRecognizer(){
+        let tap = UITapGestureRecognizer(target: self, action: #selector(UIInputViewController.dismissKeyboard))
+        tap.cancelsTouchesInView = false
+        
+        view.addGestureRecognizer(tap)
     }
     
     //MARK: UI Update
@@ -269,6 +314,7 @@ class HomeViewController: UIViewController {
     //MARK: function to hide or show msg if no ads.
     func showNoItemMsg() {
         adsCollectionView.isHidden = true
+        borderLabel.isHidden = true
         NoItemImageView.isHidden = false
         noAdTitleLabel.isHidden = false
         noAdLabel.isHidden = false
@@ -276,6 +322,7 @@ class HomeViewController: UIViewController {
     
     func hideNoItemMsg() {
         adsCollectionView.isHidden = false
+        borderLabel.isHidden = false
         NoItemImageView.isHidden = true
         noAdTitleLabel.isHidden = true
         noAdLabel.isHidden = true
@@ -341,11 +388,16 @@ extension HomeViewController : UICollectionViewDelegate, UICollectionViewDataSou
             
         case adsCollectionView:
                 if let unwrapFilteredData = filteredLocalData {
+                    if !unwrapFilteredData.isEmpty {
+                        hideNoItemMsg()
+                    }
                     return unwrapFilteredData.count
                 } else {
+                    showNoItemMsg()
                     return 0
                 }
         default:
+            showNoItemMsg()
             return 0
         }
     }
@@ -490,7 +542,11 @@ extension HomeViewController : UICollectionViewDelegate, UICollectionViewDataSou
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         filteredLocalData = nil
         if collectionView == categoryCollectionView {
+            //Selected category indexy
             indexSelectedCategoryCell = indexPath.row
+            
+            // reset search bar text
+            searchBar.text = ""
             
             if let unwrapCategoryViewModel = categoryViewModel {
                 if let unwrapCategoryData = unwrapCategoryViewModel.categoryData {
@@ -502,6 +558,40 @@ extension HomeViewController : UICollectionViewDelegate, UICollectionViewDataSou
                 }
             }
             categoryCollectionView.reloadData()
+        }
+    }
+}
+
+extension HomeViewController: UISearchBarDelegate {
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        search(shouldShow: false)
+    }
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        if searchText == "" {
+            adsCollectionView.reloadData()
+        } else {
+            if let unwrapAdViewModel = adViewModel {
+                filteredLocalData = unwrapAdViewModel.filterBySearch(arrayAd: unwrapAdViewModel.adData, searchedText: searchText)
+                
+                if let unwrapFilteredLocalData = filteredLocalData {
+                    if let unwrapCategoryViewModel = categoryViewModel {
+                        if let unwrapCategoryData = unwrapCategoryViewModel.categoryData {
+                            
+                            if let unwrapAdViewModel = adViewModel {
+                               filteredLocalData = unwrapAdViewModel.filterByCategory(arrayAd: unwrapFilteredLocalData, category: unwrapCategoryData[indexSelectedCategoryCell])
+                            }
+                        }
+                    }
+                    if filteredLocalData!.isEmpty{
+                        showNoItemMsg()
+                    }
+                } else {
+                    showNoItemMsg()
+                }
+                
+                adsCollectionView.reloadData()
+                }
         }
     }
 }

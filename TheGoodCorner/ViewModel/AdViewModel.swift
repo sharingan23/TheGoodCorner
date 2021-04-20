@@ -53,4 +53,12 @@ class AdViewModel : NSObject {
         
         return filteredArrayAd
     }
+    
+    func filterBySearch(arrayAd: [Ad], searchedText: String) -> [Ad] {
+        var filteredArrayAd = arrayAd
+        
+        filteredArrayAd = filteredArrayAd.filter { ($0.title?.lowercased().contains(searchedText))! }
+        
+        return filteredArrayAd
+    }
 }
