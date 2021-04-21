@@ -20,6 +20,11 @@ struct Constants {
         static let noPhoto = "nophoto"
         static let noItem = "box"
         static let urgent = "urgentStar"
+        static let price = "price"
+        static let calendar = "calendar"
+        static let category = "category"
+        static let starDetail = "starDetail"
+        static let siret = "siret"
     }
     
     struct ErrorString {
@@ -39,5 +44,16 @@ struct Constants {
     struct textString {
         static let searchPlaceholder = "Que recherchez-vous ?"
         static let appName = "TheGoodCorner"
+    }
+    
+    struct dateFormat {
+        static let frenchFormat = "fr"
+        static let homeDateFormat = "dd MMM HH:mm"
+        static let dateFormat = "dd MMMM HH:mm"
+    }
+    
+    struct detailString {
+        static let urgent = "Urgent"
+        static let descriptionHeader = "Description"
     }
 }

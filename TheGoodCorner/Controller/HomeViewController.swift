@@ -12,6 +12,7 @@ class HomeViewController: UIViewController {
     //MARK: ViewModel
     private var adViewModel : AdViewModel?
     private var categoryViewModel : CategoryViewModel?
+    var imageItem = UIImage(named: Constants.ImageString.noPhoto)
     
     //MARK: UIView
     let adsCollectionView: UICollectionView = {
@@ -98,7 +99,7 @@ class HomeViewController: UIViewController {
         setupCategoryCollectionView()
         setupBorderLabl()
         setupAdsCollectionView()
-        setGradientBackground()
+        UIColor.setGradientBackgroundColorView(view: view)
         hideNoItemMsg()
         
         //Look for single or multiple tap
@@ -113,6 +114,9 @@ class HomeViewController: UIViewController {
             showNoItemMsg()
             showAlertNoInternet()
         }
+        
+        //Remove back button text
+        navigationItem.backButtonTitle = Constants.itemString.noValue
     }
     
     //MARK: Selectors
@@ -132,6 +136,7 @@ class HomeViewController: UIViewController {
             view.addSubview(adsCollectionView)
             adsCollectionView.delegate = self
             adsCollectionView.dataSource = self
+        adsCollectionView.keyboardDismissMode = .onDrag
             adsCollectionView.register(AdCell.self,
                                             forCellWithReuseIdentifier: Constants.CellID.adCellID)
             
@@ -223,11 +228,11 @@ class HomeViewController: UIViewController {
     func setSearchBarUI() {
         //set Searchbar
         searchBar.sizeToFit()
-        //navigationItem.titleView = searchBar
         searchBar.placeholder = Constants.textString.searchPlaceholder
         searchBar.sizeToFit()
         searchBar.delegate = self
         
+        navigationItem.largeTitleDisplayMode = .always
         //set Urgent bar button
         navigationController?.navigationBar.tintColor = .white
         navigationController?.navigationBar.prefersLargeTitles = true
@@ -236,7 +241,7 @@ class HomeViewController: UIViewController {
         self.navigationController?.navigationBar.shadowImage = UIImage()
         self.navigationController?.navigationBar.isTranslucent = true
         showSearchBarButton(shouldShow: true)
-        search(shouldShow: true)
+        search(shouldShow: false)
     }
     
     func urgentButonBar() {
@@ -305,19 +310,7 @@ class HomeViewController: UIViewController {
         }
     }
     
-    //MARK: UI Set up
-    func setGradientBackground() {
-        let colorTop =  UIColor(red: 254/255.0, green: 95/255.0, blue: 117/255.0, alpha: 1.0).cgColor
-        let colorBottom = UIColor(red: 252/255.0, green: 152/255.0, blue: 0/255.0, alpha: 1.0).cgColor
-                    
-        let gradientLayer = CAGradientLayer()
-        gradientLayer.colors = [colorTop, colorBottom]
-        gradientLayer.locations = [0.0, 1.0]
-        gradientLayer.frame = self.view.bounds
-                
-        self.view.layer.insertSublayer(gradientLayer, at:0)
-    }
-    
+    //MARK: UI Set up    
     func animationOnReloadData(collectionView: UICollectionView) {
         UIView.transition(with: adsCollectionView,
                           duration: 0.35,
@@ -407,7 +400,6 @@ extension HomeViewController : UICollectionViewDelegate, UICollectionViewDataSou
                     }
                     return unwrapFilteredData.count
                 } else {
-                    showNoItemMsg()
                     return 0
                 }
         default:
@@ -487,7 +479,7 @@ extension HomeViewController : UICollectionViewDelegate, UICollectionViewDataSou
                 if let unwrapDateString = unwrapFilteredAd[indexPath.row].creationDate {
                     // Convert String to date and change date format
                     if let unwrapDate = unwrapDateString.toDate() {
-                        cell.dateLabel.text = unwrapDate.getFormattedDate(format: "dd MMM")
+                        cell.dateLabel.text = unwrapDate.getFormattedDate(format: Constants.dateFormat.homeDateFormat)
                     }
                 }
                 
@@ -500,6 +492,7 @@ extension HomeViewController : UICollectionViewDelegate, UICollectionViewDataSou
                             unwrapAdViewModel.callFuncToGetImageData(url: unwrapImgUrl, completionHandler: { (data, error) in
                                 if let unwrapData = data {
                                     cell.ImageViewItem.image = UIImage(data: unwrapData)
+                                    self.imageItem = UIImage(data: unwrapData)
                                 }
                             })
                         }
@@ -554,6 +547,32 @@ extension HomeViewController : UICollectionViewDelegate, UICollectionViewDataSou
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        if UIApplication.shared.isKeyboardPresented {
+            searchBar.resignFirstResponder()
+            view.endEditing(true)
+        } else {
+            if collectionView == adsCollectionView {
+                let adCell = collectionView.cellForItem(at: indexPath) as? AdCell
+                
+                // Pushing to detail view
+                if collectionView == adsCollectionView {
+                    if let navigator = navigationController {
+                        let detailledVC = DetailedViewController()
+                        if let unwrapCell = adCell {
+                            detailledVC.imageItem = unwrapCell.ImageViewItem.image
+                            detailledVC.indexItem = indexPath.row
+                            //Check if categoryw
+                            if let unwrapCategoryViewModel = categoryViewModel {
+                                detailledVC.categoryViewModel = unwrapCategoryViewModel
+                            }
+                            
+                            detailledVC.adArray = filteredLocalData
+                            navigator.pushViewController(detailledVC, animated: true)
+                        }
+                    }
+                }
+            }
+        }
         if collectionView == categoryCollectionView {
             filteredLocalData = nil
             //Selected category indexy
@@ -572,12 +591,6 @@ extension HomeViewController : UICollectionViewDelegate, UICollectionViewDataSou
                 }
             }
             categoryCollectionView.reloadData()
-        }
-        
-        if collectionView == adsCollectionView {
-            if let navigator = navigationController {
-                navigator.pushViewController(DetailedViewController(), animated: true)
-            }
         }
     }
 }

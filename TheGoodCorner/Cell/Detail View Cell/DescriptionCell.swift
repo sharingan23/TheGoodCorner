@@ -9,7 +9,17 @@ import UIKit
 
 class DescriptionCell: UITableViewCell {
 
-    let descriptionTextView = UITextView()
+    var descriptionTextView: UITextView = {
+        let textView = UITextView()
+        textView.isUserInteractionEnabled = true
+        textView.backgroundColor = UIColor.clear
+        textView.font = UIFont.systemFont(ofSize: 18)
+        textView.isScrollEnabled = true
+        textView.isEditable = false
+        textView.textColor = .black
+        
+        return textView
+    }()
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -18,7 +28,7 @@ class DescriptionCell: UITableViewCell {
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        self.backgroundColor = .white
+    
         setupdescriptionTextView()
     }
     
@@ -40,10 +50,10 @@ class DescriptionCell: UITableViewCell {
     
     func descriptionTextViewConstraints() {
         descriptionTextView.translatesAutoresizingMaskIntoConstraints = false
-        
+
         descriptionTextView.topAnchor.constraint(equalTo: self.contentView.safeAreaLayoutGuide.topAnchor).isActive = true
-        descriptionTextView.leftAnchor.constraint(equalTo: self.contentView.leftAnchor).isActive = true
+        descriptionTextView.leftAnchor.constraint(equalTo: self.contentView.leftAnchor, constant: 10).isActive = true
         descriptionTextView.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor).isActive = true
-        descriptionTextView.rightAnchor.constraint(equalTo: self.contentView.rightAnchor).isActive = true
+        descriptionTextView.rightAnchor.constraint(equalTo: self.contentView.rightAnchor, constant: -10).isActive = true
     }
 }

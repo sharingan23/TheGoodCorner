@@ -11,9 +11,10 @@ class ImageItemCellTableViewCell: UITableViewCell {
     
     let ImageViewItem: UIImageView = {
         let theImageView = UIImageView()
-        theImageView.backgroundColor = .blue
-        theImageView.contentMode = .scaleAspectFit
         theImageView.image = UIImage(named: Constants.ImageString.noPhoto)
+        theImageView.contentMode = .scaleAspectFill
+        theImageView.layer.masksToBounds = true
+        theImageView.backgroundColor = .white
         return theImageView
     }()
 
@@ -24,7 +25,7 @@ class ImageItemCellTableViewCell: UITableViewCell {
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        self.backgroundColor = .white
+        self.backgroundColor = .clear
         setupImageItemView()
     }
     
@@ -40,6 +41,8 @@ class ImageItemCellTableViewCell: UITableViewCell {
     }
     
     func setupImageItemView() {
+        ImageViewItem.frame.size = self.contentView.frame.size
+        
         self.contentView.addSubview(ImageViewItem)
         
         imageViewItemConstraints()
@@ -50,9 +53,7 @@ class ImageItemCellTableViewCell: UITableViewCell {
         
         ImageViewItem.rightAnchor.constraint(equalTo: self.contentView.rightAnchor,constant: 0).isActive = true
         ImageViewItem.topAnchor.constraint(equalTo: self.contentView.topAnchor,constant: 0).isActive = true
-        ImageViewItem.centerYAnchor.constraint(equalTo: self.contentView.centerYAnchor, constant: 0).isActive = true
-        ImageViewItem.centerXAnchor.constraint(equalTo: self.contentView.centerXAnchor, constant: 0).isActive = true
+        ImageViewItem.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor,constant: 0).isActive = true
+        ImageViewItem.leftAnchor.constraint(equalTo: self.contentView.leftAnchor,constant: 0).isActive = true
     }
-
-
 }

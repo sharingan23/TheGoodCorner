@@ -31,13 +31,6 @@ class AdViewModel : NSObject {
         self.adApiService.apiToGetAd { (ad, error) in
             if let unwrapAds = ad {
                 
-              /*  var filteredArrayAdByUrgent = unwrapAds
-                
-                filteredArrayAdByUrgent = filteredArrayAdByUrgent.filter { ($0.isUrgent)! }
-
-                // Rearrange array by date
-                self.adData = filteredArrayAdByUrgent.sorted(by: { $0.creationDate! > $1.creationDate!})*/
-                
                 self.adData = self.filteredArrayByUrgent(ad: unwrapAds) + self.filteredArrayWithOutUrgent(ad: unwrapAds)
             }
         }
