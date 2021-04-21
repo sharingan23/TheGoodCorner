@@ -21,7 +21,8 @@ class DetailedViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = UIColor(red: 253/255.0, green: 182/255.0, blue: 76/255.0, alpha: 1.0)
+        
+        view.backgroundColor = .detailViewColor
         
         createTwoDimensialArray()
         setupDetailedTableView()
@@ -180,9 +181,8 @@ extension DetailedViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-        // UIView with darkGray background for section-separators as Section Footer
         let v = UIView(frame: CGRect(x: 0, y:0, width: tableView.frame.width, height: 10))
-        v.backgroundColor = UIColor(red: 125/255.0, green: 90/255.0, blue: 37/255.0, alpha: 1.0)
+        v.backgroundColor = .descriptionBackgroundColor
         return v
     }
 
@@ -190,8 +190,6 @@ extension DetailedViewController: UITableViewDelegate, UITableViewDataSource {
         // Section Footer height
         let footerHeight = CGFloat(5)
         switch section {
-        case 0:
-            return footerHeight
         case 1:
             return footerHeight
         default:
@@ -219,10 +217,10 @@ extension DetailedViewController: UITableViewDelegate, UITableViewDataSource {
                             fatalError("DequeueReusableCell failed while casting")
                     }
             
-            cell.backgroundColor = UIColor(red: 125/255.0, green: 90/255.0, blue: 37/255.0, alpha: 1.0)
+            cell.backgroundColor = .descriptionBackgroundColor
             
             cell.descriptionTextView.backgroundColor = UIColor.clear
-            cell.descriptionTextView.textColor = .white
+            cell.descriptionTextView.textColor = .black
             cell.descriptionTextView.text = twoDimensionalArr[indexPath.section][indexPath.row]
             
             return cell
@@ -240,7 +238,7 @@ extension DetailedViewController: UITableViewDelegate, UITableViewDataSource {
             //Title
             case 0:
                 cell.detailLabelTitle.font = UIFont.boldSystemFont(ofSize: 24)
-                cell.detailLabelTitle.textColor = UIColor.white
+                cell.detailLabelTitle.textColor = UIColor.black
                 cell.detailLabelTitle.leftAnchor.constraint(equalTo: cell.leftAnchor, constant: 5).isActive = true
                 
                 cell.backgroundColor = .clear

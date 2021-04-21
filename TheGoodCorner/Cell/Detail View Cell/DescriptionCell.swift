@@ -52,8 +52,8 @@ class DescriptionCell: UITableViewCell {
         descriptionTextView.translatesAutoresizingMaskIntoConstraints = false
 
         descriptionTextView.topAnchor.constraint(equalTo: self.contentView.safeAreaLayoutGuide.topAnchor).isActive = true
-        descriptionTextView.leftAnchor.constraint(equalTo: self.contentView.leftAnchor, constant: 10).isActive = true
+        descriptionTextView.leftAnchor.constraint(equalTo: self.contentView.leftAnchor, constant: 5).isActive = true
         descriptionTextView.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor).isActive = true
-        descriptionTextView.rightAnchor.constraint(equalTo: self.contentView.rightAnchor, constant: -10).isActive = true
+        descriptionTextView.rightAnchor.constraint(equalTo: self.contentView.rightAnchor, constant: 5).isActive = true
     }
 }

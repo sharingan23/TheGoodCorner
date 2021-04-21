@@ -567,6 +567,7 @@ extension HomeViewController : UICollectionViewDelegate, UICollectionViewDataSou
                             }
                             
                             detailledVC.adArray = filteredLocalData
+                            
                             navigator.pushViewController(detailledVC, animated: true)
                         }
                     }

@@ -19,6 +19,11 @@ extension UIColor {
     static let unSelectedCategoryBackgroundLblColor = UIColor.rgb(redCG: 128, greenCG: 85, blueCG: 91)
     static let detailTextColor =  UIColor.rgb(redCG: 64, greenCG: 42, blueCG: 45)
     
+    //Detail cell color
+    static let descriptionBackgroundColor =  #colorLiteral(red: 0.9665641189, green: 0.6209022999, blue: 0.3023603261, alpha: 1)
+    
+    static let detailViewColor = #colorLiteral(red: 0.9653555751, green: 0.7242546678, blue: 0.4709957242, alpha: 1)
+    
     static func setGradientBackgroundColorView(view: UIView) {
         let colorTop =  UIColor(red: 254/255.0, green: 95/255.0, blue: 117/255.0, alpha: 1.0).cgColor
         let colorBottom = UIColor(red: 252/255.0, green: 152/255.0, blue: 0/255.0, alpha: 1.0).cgColor
